@@ -151,9 +151,9 @@ StyledWindow {
             anchors.margins: -50 // Make border thicker to smooth out bulge from closed drawers
             group: blobGroup
             radius: root.borderRounding
-            borderTop: bar.implicitHeight - anchors.margins - root.sdfBorderOffset
+            borderLeft: bar.implicitWidth - anchors.margins - root.sdfBorderOffset
             borderRight: root.borderThickness - anchors.margins - root.sdfBorderOffset
-            borderLeft: root.borderThickness - anchors.margins - root.sdfBorderOffset
+            borderTop: root.borderThickness - anchors.margins - root.sdfBorderOffset
             borderBottom: root.borderThickness - anchors.margins - root.sdfBorderOffset
         }
 
@@ -218,17 +218,15 @@ StyledWindow {
             id: popoutBg
 
             // Extra width to prevent vertical movement deformation partially detaching panel from bar
-            property real extraHeight: panels.popouts.isDetached ? 0 : 0.2
+            property real extraWidth: panels.popouts.isDetached ? 0 : 0.2
 
             panel: panels.popoutsWrapper
             deformAmount: panels.popouts.isDetached ? 0.05 : panels.popouts.hasCurrent ? 0.15 : 0.1
-            y: panels.popoutsWrapper.y + panels.popouts.y + bar.implicitHeight - panels.popouts.height * extraHeight
-            implicitHeight: panels.popouts.height * (1 + extraHeight)
+            x: panels.popoutsWrapper.x + panels.popouts.x + bar.implicitWidth - panels.popouts.width * extraWidth
+            implicitWidth: panels.popouts.width * (1 + extraWidth)
 
             Behavior on extraHeight {
-                Anim {
-                    type: Anim.DefaultSpatial
-                }
+                Anim {}
             }
         }
     }
@@ -290,8 +288,8 @@ StyledWindow {
         BarWrapper {
             id: bar
 
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
             screen: root.screen
             visibilities: visibilities

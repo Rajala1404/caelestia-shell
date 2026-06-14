@@ -8,7 +8,7 @@ import qs.components
 import qs.services
 import qs.utils
 
-RowLayout {
+ColumnLayout {
     id: root
 
     required property int index
@@ -18,14 +18,14 @@ RowLayout {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.small : 0)
+    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
     readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows
 
-    Layout.alignment: Qt.AlignVCenter
-    Layout.preferredWidth: size
+    Layout.alignment: Qt.AlignHCenter
+    Layout.preferredHeight: size
 
     spacing: 0
 
@@ -33,7 +33,7 @@ RowLayout {
         id: indicator
 
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
+        Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small
 
         animate: true
         text: {
@@ -52,6 +52,7 @@ RowLayout {
         }
         color: Config.bar.workspaces.occupiedBg || root.isOccupied || root.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
         horizontalAlignment: Qt.AlignHCenter
+        font.family: Tokens.font.workspaces
     }
 
     Loader {
@@ -59,14 +60,14 @@ RowLayout {
 
         asynchronous: true
 
-        Layout.alignment: Qt.AlignVCenter
-        Layout.fillWidth: true
-        Layout.leftMargin: -Tokens.sizes.bar.innerHeight / 10
+        Layout.alignment: Qt.AlignHCenter
+        Layout.fillHeight: true
+        Layout.topMargin: -Tokens.sizes.bar.innerWidth / 10
 
         visible: active
         active: root.hasWindows
 
-        sourceComponent: Row {
+        sourceComponent: Column {
             spacing: 0
 
             add: Transition {
@@ -110,7 +111,7 @@ RowLayout {
         }
     }
 
-    Behavior on Layout.preferredWidth {
+    Behavior on Layout.preferredHeight {
         Anim {}
     }
 }

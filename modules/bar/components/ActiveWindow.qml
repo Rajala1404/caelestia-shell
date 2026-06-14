@@ -26,17 +26,17 @@ Item {
         return title;
     }
 
-    readonly property int maxWidth: {
+    readonly property int maxHeight: {
         const otherModules = bar.children.filter(c => c.id && c.item !== this && c.id !== "spacer");
-        const otherWidth = otherModules.reduce((acc, curr) => acc + (curr.item.nonAnimWidth ?? curr.width), 0);
+        const otherHeight = otherModules.reduce((acc, curr) => acc + (curr.item.nonAnimHeight ?? curr.height), 0);
         // Length - 2 cause repeater counts as a child
-        return bar.width - otherWidth - bar.spacing * (bar.children.length - 1) - bar.hPadding * 2;
+        return bar.height - otherHeight - bar.spacing * (bar.children.length - 1) - bar.vPadding * 2;
     }
     property Title current: text1
 
     clip: true
-    implicitWidth: icon.implicitWidth + current.implicitWidth + current.anchors.leftMargin
-    implicitHeight: Math.max(icon.implicitWidth, current.implicitHeight)
+    implicitWidth: Math.max(icon.implicitWidth, current.implicitHeight)
+    implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
 
     Loader {
         asynchronous: true
@@ -67,7 +67,7 @@ Item {
     MaterialIcon {
         id: icon
 
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
 
         animate: true
         text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")
@@ -89,7 +89,7 @@ Item {
         font.pointSize: root.Tokens.font.size.smaller
         font.family: root.Tokens.font.family.mono
         elide: Qt.ElideRight
-        elideWidth: root.maxWidth - icon.width
+        elideWidth: root.maxHeight - icon.height
 
         onTextChanged: {
             const next = root.current === text1 ? text2 : text1;
@@ -100,17 +100,15 @@ Item {
     }
 
     Behavior on implicitWidth {
-        Anim {
-            type: Anim.DefaultSpatial
-        }
+        Anim {}
     }
 
     component Title: StyledText {
         id: text
 
-        anchors.verticalCenter: icon.verticalCenter
-        anchors.left: icon.right
-        anchors.leftMargin: Tokens.spacing.small
+        anchors.horizontalCenter: icon.horizontalCenter
+        anchors.top: icon.bottom
+        anchors.topMargin: Tokens.spacing.small
 
         font.pointSize: metrics.font.pointSize
         font.family: metrics.font.family
@@ -121,15 +119,15 @@ Item {
             Translate {
                 x: root.Config.bar.activeWindow.inverted ? -text.implicitWidth + text.implicitHeight : 0
             },
-            // Rotation {
-            //     angle: root.Config.bar.activeWindow.inverted ? 270 : 90
-            //     origin.x: text.implicitHeight / 2
-            //     origin.y: text.implicitHeight / 2
-            // }
+            Rotation {
+                angle: root.Config.bar.activeWindow.inverted ? 270 : 90
+                origin.x: text.implicitHeight / 2
+                origin.y: text.implicitHeight / 2
+            }
         ]
 
-        width: implicitWidth
-        height: implicitHeight
+        width: implicitHeight
+        height: implicitWidth
 
         Behavior on opacity {
             Anim {}
