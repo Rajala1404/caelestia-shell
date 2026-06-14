@@ -20,16 +20,16 @@ StyledRect {
     radius: Tokens.rounding.full
 
     clip: true
-    implicitWidth: iconColumn.implicitWidth + Tokens.padding.normal * 2 - (Config.bar.status.showLockStatus && !Hypr.capsLock && !Hypr.numLock ? iconColumn.spacing : 0)
     implicitHeight: Tokens.sizes.bar.innerHeight
+    implicitWidth: iconColumn.implicitWidth + Tokens.padding.medium * 2 - (Config.bar.status.showLockStatus && !Hypr.capsLock && !Hypr.numLock ? iconColumn.spacing : 0)
 
-    RowLayout {
+    ColumnLayout {
         id: iconColumn
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        anchors.left: parent.left
         anchors.right: parent.right
-        anchors.rightMargin: Tokens.padding.normal
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Tokens.padding.normal
 
         spacing: Tokens.spacing.smaller / 2
 
@@ -171,7 +171,7 @@ StyledRect {
             name: "bluetooth"
             active: Config.bar.status.showBluetooth
 
-            sourceComponent: RowLayout {
+            sourceComponent: ColumnLayout {
                 spacing: Tokens.spacing.smaller / 2
 
                 // Bluetooth icon

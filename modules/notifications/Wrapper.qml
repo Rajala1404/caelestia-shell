@@ -9,6 +9,7 @@ Item {
     required property Item sidebarPanel
     property alias osdPanel: content.osdPanel
     property alias sessionPanel: content.sessionPanel
+    property alias utilitiesPanel: content.utilitiesPanel
 
     visible: height > 0
     anchors.topMargin: Tokens.sizes.bar.innerHeight + Math.max(Tokens.padding.smaller, Config.border.thickness)
@@ -18,6 +19,7 @@ Item {
     Content {
         id: content
 
+        anchors.topMargin: -root.anchors.topMargin
         visibilities: root.visibilities
     }
 }

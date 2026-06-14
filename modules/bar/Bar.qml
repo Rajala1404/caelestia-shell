@@ -10,14 +10,14 @@ import Caelestia.Config
 import qs.components
 import qs.services
 
-RowLayout {
+ColumnLayout {
     id: root
 
     required property ShellScreen screen
     required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
     required property bool fullscreen
-    readonly property int hPadding: Tokens.padding.large
+    readonly property int vPadding: Tokens.padding.large
 
     function closeTray(): void {
         if (!Config.bar.tray.compact)
@@ -31,8 +31,8 @@ RowLayout {
         }
     }
 
-    function checkPopout(x: real): void {
-        const ch = childAt(x, height / 2) as WrappedLoader;
+    function checkPopout(y: real): void {
+        const ch = childAt(width / 2, y) as WrappedLoader;
 
         if (ch?.id !== "tray")
             closeTray();
@@ -43,24 +43,24 @@ RowLayout {
         }
 
         const id = ch.id;
-        const left = ch.x;
+        const top = ch.y;
 
         if (id === "statusIcons" && Config.bar.popouts.statusIcons) {
             const items = (ch.item as StatusIcons).items;
-            const icon = items.childAt(mapToItem(items, x, 0).x, items.height / 2);
+            const icon = items.childAt(items.width / 2, mapToItem(items, 0, y).y);
             if (icon) {
                 popouts.currentName = icon.name;
-                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, icon.implicitWidth / 2, 0).x);
+                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, 0, icon.implicitHeight / 2).y);
                 popouts.hasCurrent = true;
             }
         } else if (id === "tray" && Config.bar.popouts.tray) {
             const tray = ch.item as Tray;
-            if (!Config.bar.tray.compact || (tray.expanded && !tray.expandIcon.contains(mapToItem(tray.expandIcon, x, tray.implicitHeight / 2)))) {
-                const index = Math.floor(((x - left - tray.padding * 2 + tray.spacing) / tray.layout.implicitWidth) * tray.items.count);
+            if (!Config.bar.tray.compact || (tray.expanded && !tray.expandIcon.contains(mapToItem(tray.expandIcon, tray.implicitWidth / 2, y)))) {
+                const index = Math.floor(((y - top - tray.padding * 2 + tray.spacing) / tray.layout.implicitHeight) * tray.items.count);
                 const trayItem = tray.items.itemAt(index);
                 if (trayItem) {
                     popouts.currentName = `traymenu${index}`;
-                    popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
+                    popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitHeight / 2).y);
                     popouts.hasCurrent = true;
                 } else {
                     popouts.hasCurrent = false;
@@ -71,13 +71,13 @@ RowLayout {
             }
         } else if (id === "activeWindow" && Config.bar.popouts.activeWindow && Config.bar.activeWindow.showOnHover) {
             popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = (ch.item as Item).mapToItem(root, (ch.item as Item).implicitWidth / 2, 0).x ?? 0;
+            popouts.currentCenter = (ch.item as Item).mapToItem(root, 0, (ch.item as Item).implicitHeight / 2).y ?? 0;
             popouts.hasCurrent = true;
         }
     }
 
-    function handleWheel(x: real, angleDelta: point): void {
-        const ch = childAt(x, height / 2) as WrappedLoader;
+    function handleWheel(y: real, angleDelta: point): void {
+        const ch = childAt(width / 2, y) as WrappedLoader;
         if (ch?.id === "workspaces" && Config.bar.scrollActions.workspaces) {
             // Workspace scroll
             const mon = (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? Hypr.monitorFor(screen) : Hypr.focusedMonitor);
@@ -85,7 +85,7 @@ RowLayout {
             if (specialWs?.length > 0)
                 Hypr.dispatch(`togglespecialworkspace ${specialWs.slice(8)}`);
             else if (angleDelta.y < 0 || (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? mon.activeWorkspace?.id : Hypr.activeWsId) > 1)
-                Hypr.dispatch(`workspace r${angleDelta.y > 0 ? "-" : "+"}1`);
+                Hypr.dispatch(Hypr.usingLua ? `hl.dsp.focus({ workspace = "r${angleDelta.y > 0 ? "-" : "+"}1" })` : `workspace r${angleDelta.y > 0 ? "-" : "+"}1`);
         } else if (x < screen.width / 2 && Config.bar.scrollActions.volume) {
             // Volume scroll on left half
             if (angleDelta.y > 0)
@@ -93,7 +93,7 @@ RowLayout {
             else if (angleDelta.y < 0)
                 Audio.decrementVolume();
         } else if (Config.bar.scrollActions.brightness) {
-            // Brightness scroll on right half
+            // Brightness scroll on bottom half
             const monitor = Brightness.getMonitorForScreen(screen);
             if (angleDelta.y > 0)
                 monitor.setBrightness(monitor.brightness + GlobalConfig.services.brightnessIncrement);
@@ -115,7 +115,7 @@ RowLayout {
             DelegateChoice {
                 roleValue: "spacer"
                 delegate: WrappedLoader {
-                    Layout.fillWidth: enabled
+                    Layout.fillHeight: enabled
                 }
             }
             DelegateChoice {
@@ -136,6 +136,7 @@ RowLayout {
             DelegateChoice {
                 roleValue: "activeWindow"
                 delegate: WrappedLoader {
+                    Layout.fillWidth: true
                     visible: !root.fullscreen
                     sourceComponent: ActiveWindow {
                         bar: root
@@ -200,11 +201,11 @@ RowLayout {
         }
 
         asynchronous: true
-        Layout.alignment: Qt.AlignVCenter
+        Layout.alignment: Qt.AlignHCenter
 
         // Cursed ahh thing to add padding to first and last enabled components
-        Layout.leftMargin: findFirstEnabled() === this ? root.hPadding : 0
-        Layout.rightMargin: findLastEnabled() === this ? root.hPadding : 0
+        Layout.topMargin: findFirstEnabled() === this ? root.vPadding : 0
+        Layout.bottomMargin: findLastEnabled() === this ? root.vPadding : 0
 
         visible: enabled
         active: enabled

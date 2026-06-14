@@ -21,15 +21,15 @@ StyledRect {
         return i % Config.bar.workspaces.shown;
     }
 
-    property real leading: workspaces.count > 0 ? workspaces.itemAt(currentWsIdx)?.x ?? 0 : 0
-    property real trailing: workspaces.count > 0 ? workspaces.itemAt(currentWsIdx)?.x ?? 0 : 0
+    property real leading: workspaces.count > 0 ? workspaces.itemAt(currentWsIdx)?.y ?? 0 : 0
+    property real trailing: workspaces.count > 0 ? workspaces.itemAt(currentWsIdx)?.y ?? 0 : 0
     property real currentSize: workspaces.count > 0 ? (workspaces.itemAt(currentWsIdx) as Workspace)?.size ?? 0 : 0
     property real offset: Math.min(leading, trailing)
     property real size: {
         const s = Math.abs(leading - trailing) + currentSize;
         if (Config.bar.workspaces.activeTrail && lastWs > currentWsIdx) {
             const ws = workspaces.itemAt(lastWs) as Workspace;
-            return ws ? Math.min(ws.x + ws.size - offset, s) : 0;
+            return ws ? Math.min(ws.y + ws.size - offset, s) : 0;
         }
         return s;
     }
@@ -44,8 +44,8 @@ StyledRect {
 
     clip: true
     x: offset + mask.x
+    implicitWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
     implicitWidth: size
-    implicitHeight: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
     radius: Tokens.rounding.full
     color: Colours.palette.m3primary
 
@@ -54,12 +54,12 @@ StyledRect {
         sourceColor: Colours.palette.m3onSurface
         colorizationColor: Colours.palette.m3onPrimary
 
-        x: -parent.offset
-        y: 0
+        x: 0
+        y: -parent.offset
         implicitWidth: root.mask.implicitWidth
         implicitHeight: root.mask.implicitHeight
 
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Behavior on leading {
