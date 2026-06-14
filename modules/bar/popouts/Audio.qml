@@ -14,8 +14,8 @@ Item {
 
     required property PopoutState popouts
 
-    implicitWidth: layout.implicitWidth + Tokens.padding.medium * 2
-    implicitHeight: layout.implicitHeight + Tokens.padding.medium * 2
+    implicitWidth: layout.implicitWidth + Tokens.padding.normal * 2
+    implicitHeight: layout.implicitHeight + Tokens.padding.normal * 2
 
     ButtonGroup {
         id: sinks
@@ -30,11 +30,11 @@ Item {
 
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
         StyledText {
             text: qsTr("Output device")
-            font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
+            font.weight: 500
         }
 
         Repeater {
@@ -53,9 +53,9 @@ Item {
         }
 
         StyledText {
-            Layout.topMargin: Tokens.spacing.medium
+            Layout.topMargin: Tokens.spacing.smaller
             text: qsTr("Input device")
-            font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
+            font.weight: 500
         }
 
         Repeater {
@@ -72,14 +72,15 @@ Item {
         }
 
         StyledText {
-            Layout.topMargin: Tokens.spacing.medium
+            Layout.topMargin: Tokens.spacing.smaller
+            Layout.bottomMargin: -Tokens.spacing.small / 2
             text: qsTr("Volume (%1)").arg(Audio.muted ? qsTr("Muted") : `${Math.round(Audio.volume * 100)}%`)
-            font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
+            font.weight: 500
         }
 
         CustomMouseArea {
             Layout.fillWidth: true
-            implicitHeight: Tokens.padding.medium * 3
+            implicitHeight: Tokens.padding.normal * 3
 
             onWheel: event => {
                 if (event.angleDelta.y > 0)
@@ -94,16 +95,20 @@ Item {
                 implicitHeight: parent.implicitHeight
 
                 value: Audio.volume
-                onInteraction: value => Audio.setVolume(value)
+                onMoved: Audio.setVolume(value)
+
+                Behavior on value {
+                    Anim {}
+                }
             }
         }
 
         IconTextButton {
             Layout.fillWidth: true
-            Layout.topMargin: Tokens.spacing.medium
+            Layout.topMargin: Tokens.spacing.normal
             inactiveColour: Colours.palette.m3primaryContainer
             inactiveOnColour: Colours.palette.m3onPrimaryContainer
-            verticalPadding: Tokens.padding.extraSmall
+            verticalPadding: Tokens.padding.small
             text: qsTr("Open settings")
             icon: "settings"
 

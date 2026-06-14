@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
-import Caelestia
 import Caelestia.Config
 import qs.components
 import qs.components.filedialog
@@ -13,6 +12,15 @@ Item {
     id: root
 
     required property DrawerVisibilities visibilities
+    readonly property bool needsKeyboard: {
+        const count = repeater.count;
+        for (let i = 0; i < count; i++) {
+            const item = repeater.itemAt(i) as Loader;
+            if (item?.sourceComponent === mediaComponent && (item?.item as MediaWrapper)?.needsKeyboard)
+                return true;
+        }
+        return false;
+    }
     required property DashboardState dashState
     required property FileDialog facePicker
 
@@ -34,7 +42,7 @@ Item {
                 component: performanceComponent,
                 iconName: "speed",
                 text: qsTr("Performance"),
-                enabled: Config.dashboard.showPerformance
+                enabled: Config.dashboard.showPerformance && (Config.dashboard.performance.showCpu || Config.dashboard.performance.showGpu || Config.dashboard.performance.showMemory || Config.dashboard.performance.showStorage || Config.dashboard.performance.showNetwork || Config.dashboard.performance.showBattery)
             },
             {
                 component: weatherComponent,
@@ -58,7 +66,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: CUtils.clamp(anchors.margins - Config.border.thickness, 0, anchors.margins)
+        anchors.topMargin: Tokens.padding.normal
         anchors.margins: Tokens.padding.large
 
         nonAnimWidth: root.nonAnimWidth - anchors.margins * 2
@@ -75,7 +83,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.margins: Tokens.padding.large
 
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         color: "transparent"
 
         Flickable {
@@ -166,7 +174,7 @@ Item {
             Component {
                 id: mediaComponent
 
-                Media {
+                MediaWrapper {
                     visibilities: root.visibilities
                 }
             }
@@ -190,10 +198,14 @@ Item {
     }
 
     Behavior on implicitWidth {
-        Anim {}
+        Anim {
+            type: Anim.EmphasizedLarge
+        }
     }
 
     Behavior on implicitHeight {
-        Anim {}
+        Anim {
+            type: Anim.EmphasizedLarge
+        }
     }
 }

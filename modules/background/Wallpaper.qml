@@ -12,24 +12,22 @@ Item {
     id: root
 
     property string source: Wallpapers.current
-    property CachingImage current
+    property Image current: one
     property bool completed
 
     onSourceChanged: {
         if (!source)
             current = null;
+        else if (current === one)
+            two.update();
         else
-            current = imgComp.createObject(this, {
-                path: source
-            });
+            one.update();
     }
 
     Component.onCompleted: {
         if (source)
             Qt.callLater(() => {
-                current = imgComp.createObject(this, {
-                    path: source
-                });
+                one.update();
                 completed = true;
             });
     }
@@ -45,12 +43,12 @@ Item {
 
             Row {
                 anchors.centerIn: parent
-                spacing: Tokens.spacing.largeIncreased
+                spacing: Tokens.spacing.large
 
                 MaterialIcon {
                     text: "sentiment_stressed"
                     color: Colours.palette.m3onSurfaceVariant
-                    fontStyle: Tokens.font.icon.builders.extraLarge.scale(5).build()
+                    font.pointSize: Tokens.font.size.extraLarge * 5
                 }
 
                 Column {
@@ -60,12 +58,13 @@ Item {
                     StyledText {
                         text: qsTr("Wallpaper missing?")
                         color: Colours.palette.m3onSurfaceVariant
-                        font: Tokens.font.body.builders.large.size(28 * 2).weight(Font.Bold).build()
+                        font.pointSize: Tokens.font.size.extraLarge * 2
+                        font.bold: true
                     }
 
                     StyledRect {
-                        implicitWidth: selectWallText.implicitWidth + Tokens.padding.extraLargeIncreased
-                        implicitHeight: selectWallText.implicitHeight + Tokens.padding.small
+                        implicitWidth: selectWallText.implicitWidth + Tokens.padding.large * 2
+                        implicitHeight: selectWallText.implicitHeight + Tokens.padding.small * 2
 
                         radius: Tokens.rounding.full
                         color: Colours.palette.m3primary
@@ -92,7 +91,7 @@ Item {
 
                             text: qsTr("Set it now!")
                             color: Colours.palette.m3onPrimary
-                            font: Tokens.font.body.large
+                            font.pointSize: Tokens.font.size.large
                         }
                     }
                 }
@@ -100,34 +99,48 @@ Item {
         }
     }
 
-    Component {
-        id: imgComp
+    Img {
+        id: one
+    }
 
-        CachingImage {
-            id: img
+    Img {
+        id: two
+    }
 
-            anchors.fill: parent
+    component Img: CachingImage {
+        id: img
 
-            opacity: 0
+        function update(): void {
+            if (path === root.source)
+                root.current = this;
+            else
+                path = root.source;
+        }
 
-            onStatusChanged: {
-                if (status === Image.Ready)
-                    anim.start();
+        anchors.fill: parent
+
+        opacity: 0
+        scale: Wallpapers.showPreview ? 1 : 0.8
+
+        onStatusChanged: {
+            if (status === Image.Ready)
+                root.current = this;
+        }
+
+        states: State {
+            name: "visible"
+            when: root.current === img
+
+            PropertyChanges {
+                img.opacity: 1
+                img.scale: 1
             }
+        }
 
-            Anim on opacity {
-                id: anim
-
-                type: Anim.SlowEffects
-                running: false
-                from: 0
-                to: 1
-            }
-
-            Timer {
-                running: root.current !== img && root.current?.status === Image.Ready
-                interval: anim.duration
-                onTriggered: img.destroy()
+        transitions: Transition {
+            Anim {
+                target: img
+                properties: "opacity,scale"
             }
         }
     }

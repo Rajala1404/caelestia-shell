@@ -19,7 +19,7 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         onClicked: {
             Apps.launch(root.modelData);
             root.visibilities.launcher = false;
@@ -28,9 +28,9 @@ Item {
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: Tokens.padding.medium
-        anchors.rightMargin: Tokens.padding.medium
-        anchors.margins: Tokens.padding.small
+        anchors.leftMargin: Tokens.padding.larger
+        anchors.rightMargin: Tokens.padding.larger
+        anchors.margins: Tokens.padding.smaller
 
         IconImage {
             id: icon
@@ -44,7 +44,7 @@ Item {
 
         Item {
             anchors.left: icon.right
-            anchors.leftMargin: Tokens.spacing.medium
+            anchors.leftMargin: Tokens.spacing.normal
             anchors.verticalCenter: icon.verticalCenter
 
             implicitWidth: parent.width - icon.width - favouriteIcon.width
@@ -54,18 +54,18 @@ Item {
                 id: name
 
                 text: root.modelData?.name ?? ""
-                font: Tokens.font.body.medium
+                font.pointSize: Tokens.font.size.normal
             }
 
             StyledText {
                 id: comment
 
                 text: (root.modelData?.comment || root.modelData?.genericName || root.modelData?.name) ?? ""
-                font: Tokens.font.body.small
+                font.pointSize: Tokens.font.size.small
                 color: Colours.palette.m3outline
 
                 elide: Text.ElideRight
-                width: root.width - icon.width - favouriteIcon.width - Tokens.rounding.extraLargeIncreased
+                width: root.width - icon.width - favouriteIcon.width - Tokens.rounding.normal * 2
 
                 anchors.top: name.bottom
             }

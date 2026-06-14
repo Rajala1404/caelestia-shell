@@ -13,8 +13,6 @@ Item {
     required property BarPopouts.Wrapper popouts
     required property matrix4x4 deformMatrix
 
-    readonly property real nonAnimHeight: idleInhibit.nonAnimHeight + record.nonAnimHeight + toggles.implicitHeight + layout.spacing * 2
-
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
@@ -22,23 +20,17 @@ Item {
         id: layout
 
         anchors.fill: parent
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
-        IdleInhibit {
-            id: idleInhibit
-        }
+        IdleInhibit {}
 
         Record {
-            id: record
-
             props: root.props
             visibilities: root.visibilities
             z: 1
         }
 
         Toggles {
-            id: toggles
-
             visibilities: root.visibilities
             popouts: root.popouts
         }

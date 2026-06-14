@@ -26,10 +26,10 @@ ColumnLayout {
     StyledText {
         visible: root.view === "wireless"
         Layout.preferredHeight: visible ? implicitHeight : 0
-        Layout.topMargin: visible ? Tokens.padding.medium : 0
-        Layout.rightMargin: Tokens.padding.extraSmall
+        Layout.topMargin: visible ? Tokens.padding.normal : 0
+        Layout.rightMargin: Tokens.padding.small
         text: qsTr("Wireless")
-        font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
+        font.weight: 500
     }
 
     Toggle {
@@ -44,10 +44,10 @@ ColumnLayout {
         visible: root.view === "wireless"
         Layout.preferredHeight: visible ? implicitHeight : 0
         Layout.topMargin: visible ? Tokens.spacing.small : 0
-        Layout.rightMargin: Tokens.padding.extraSmall
+        Layout.rightMargin: Tokens.padding.small
         text: qsTr("%1 networks available").arg(Nmcli.networks.length) // qmllint disable missing-property
         color: Colours.palette.m3onSurfaceVariant
-        font: Tokens.font.body.small
+        font.pointSize: Tokens.font.size.small
     }
 
     Repeater {
@@ -70,7 +70,7 @@ ColumnLayout {
             visible: root.view === "wireless"
             Layout.preferredHeight: visible ? implicitHeight : 0
             Layout.fillWidth: true
-            Layout.rightMargin: Tokens.padding.extraSmall
+            Layout.rightMargin: Tokens.padding.small
             spacing: Tokens.spacing.small
 
             opacity: 0
@@ -82,9 +82,7 @@ ColumnLayout {
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
 
             Behavior on scale {
@@ -99,22 +97,22 @@ ColumnLayout {
             MaterialIcon {
                 visible: networkItem.modelData.isSecure
                 text: "lock"
-                fontStyle: Tokens.font.icon.small
+                font.pointSize: Tokens.font.size.small
             }
 
             StyledText {
-                Layout.leftMargin: Tokens.spacing.extraSmall
-                Layout.rightMargin: Tokens.spacing.extraSmall
+                Layout.leftMargin: Tokens.spacing.small / 2
+                Layout.rightMargin: Tokens.spacing.small / 2
                 Layout.fillWidth: true
                 text: networkItem.modelData.ssid
                 elide: Text.ElideRight
-                font: Tokens.font.body.builders.medium.weight(networkItem.modelData.active ? Font.Medium : Font.Normal).build()
+                font.weight: networkItem.modelData.active ? 500 : 400
                 color: networkItem.modelData.active ? Colours.palette.m3primary : Colours.palette.m3onSurface
             }
 
             StyledRect {
                 implicitWidth: implicitHeight
-                implicitHeight: wirelessConnectIcon.implicitHeight + Tokens.padding.extraSmall
+                implicitHeight: wirelessConnectIcon.implicitHeight + Tokens.padding.small
 
                 radius: Tokens.rounding.full
                 color: Qt.alpha(Colours.palette.m3primary, networkItem.modelData.active ? 1 : 0)
@@ -157,9 +155,7 @@ ColumnLayout {
                     opacity: networkItem.loading ? 0 : 1
 
                     Behavior on opacity {
-                        Anim {
-                            type: Anim.DefaultEffects
-                        }
+                        Anim {}
                     }
                 }
             }
@@ -171,7 +167,7 @@ ColumnLayout {
         Layout.preferredHeight: visible ? implicitHeight : 0
         Layout.topMargin: visible ? Tokens.spacing.small : 0
         Layout.fillWidth: true
-        implicitHeight: rescanBtn.implicitHeight + Tokens.padding.small
+        implicitHeight: rescanBtn.implicitHeight + Tokens.padding.small * 2
 
         radius: Tokens.rounding.full
         color: Colours.palette.m3primaryContainer
@@ -205,17 +201,15 @@ ColumnLayout {
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
         }
 
         CircularIndicator {
             anchors.centerIn: parent
-            strokeWidth: Tokens.padding.extraSmall / 2
+            strokeWidth: Tokens.padding.small / 2
             bgColour: "transparent"
-            implicitSize: parent.implicitHeight - Tokens.padding.large
+            implicitSize: parent.implicitHeight - Tokens.padding.smaller * 2
             running: Nmcli.scanning
         }
     }
@@ -224,20 +218,20 @@ ColumnLayout {
     StyledText {
         visible: root.view === "ethernet"
         Layout.preferredHeight: visible ? implicitHeight : 0
-        Layout.topMargin: visible ? Tokens.padding.medium : 0
-        Layout.rightMargin: Tokens.padding.extraSmall
+        Layout.topMargin: visible ? Tokens.padding.normal : 0
+        Layout.rightMargin: Tokens.padding.small
         text: qsTr("Ethernet")
-        font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
+        font.weight: 500
     }
 
     StyledText {
         visible: root.view === "ethernet"
         Layout.preferredHeight: visible ? implicitHeight : 0
         Layout.topMargin: visible ? Tokens.spacing.small : 0
-        Layout.rightMargin: Tokens.padding.extraSmall
+        Layout.rightMargin: Tokens.padding.small
         text: qsTr("%1 devices available").arg(Nmcli.ethernetDevices.length)
         color: Colours.palette.m3onSurfaceVariant
-        font: Tokens.font.body.small
+        font.pointSize: Tokens.font.size.small
     }
 
     Repeater {
@@ -259,7 +253,7 @@ ColumnLayout {
             visible: root.view === "ethernet"
             Layout.preferredHeight: visible ? implicitHeight : 0
             Layout.fillWidth: true
-            Layout.rightMargin: Tokens.padding.extraSmall
+            Layout.rightMargin: Tokens.padding.small
             spacing: Tokens.spacing.small
 
             opacity: 0
@@ -271,9 +265,7 @@ ColumnLayout {
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
 
             Behavior on scale {
@@ -286,18 +278,18 @@ ColumnLayout {
             }
 
             StyledText {
-                Layout.leftMargin: Tokens.spacing.extraSmall
-                Layout.rightMargin: Tokens.spacing.extraSmall
+                Layout.leftMargin: Tokens.spacing.small / 2
+                Layout.rightMargin: Tokens.spacing.small / 2
                 Layout.fillWidth: true
                 text: ethernetItem.modelData.interface || qsTr("Unknown")
                 elide: Text.ElideRight
-                font: Tokens.font.body.builders.medium.weight(ethernetItem.modelData.connected ? Font.Medium : Font.Normal).build()
+                font.weight: ethernetItem.modelData.connected ? 500 : 400
                 color: ethernetItem.modelData.connected ? Colours.palette.m3primary : Colours.palette.m3onSurface
             }
 
             StyledRect {
                 implicitWidth: implicitHeight
-                implicitHeight: connectIcon.implicitHeight + Tokens.padding.extraSmall
+                implicitHeight: connectIcon.implicitHeight + Tokens.padding.small
 
                 radius: Tokens.rounding.full
                 color: Qt.alpha(Colours.palette.m3primary, ethernetItem.modelData.connected ? 1 : 0)
@@ -331,9 +323,7 @@ ColumnLayout {
                     opacity: ethernetItem.loading ? 0 : 1
 
                     Behavior on opacity {
-                        Anim {
-                            type: Anim.DefaultEffects
-                        }
+                        Anim {}
                     }
                 }
             }
@@ -381,8 +371,8 @@ ColumnLayout {
         property alias toggle: toggle
 
         Layout.fillWidth: true
-        Layout.rightMargin: Tokens.padding.extraSmall
-        spacing: Tokens.spacing.medium
+        Layout.rightMargin: Tokens.padding.small
+        spacing: Tokens.spacing.normal
 
         StyledText {
             Layout.fillWidth: true

@@ -73,23 +73,23 @@ RowLayout {
             root.isEditing = false;
         }
 
-        padding: Tokens.padding.extraSmall
-        leftPadding: Tokens.padding.medium
-        rightPadding: Tokens.padding.medium
+        padding: Tokens.padding.small
+        leftPadding: Tokens.padding.normal
+        rightPadding: Tokens.padding.normal
 
         background: StyledRect {
             implicitWidth: 100
-            radius: Tokens.rounding.medium
+            radius: Tokens.rounding.small
             color: Colours.tPalette.m3surfaceContainerHigh
         }
     }
 
     StyledRect {
-        radius: Tokens.rounding.medium
+        radius: Tokens.rounding.small
         color: Colours.palette.m3primary
 
         implicitWidth: implicitHeight
-        implicitHeight: upIcon.implicitHeight + Tokens.padding.small
+        implicitHeight: upIcon.implicitHeight + Tokens.padding.small * 2
 
         StateLayer {
             id: upState
@@ -120,11 +120,11 @@ RowLayout {
     }
 
     StyledRect {
-        radius: Tokens.rounding.medium
+        radius: Tokens.rounding.small
         color: Colours.palette.m3primary
 
         implicitWidth: implicitHeight
-        implicitHeight: downIcon.implicitHeight + Tokens.padding.small
+        implicitHeight: downIcon.implicitHeight + Tokens.padding.small * 2
 
         StateLayer {
             id: downState

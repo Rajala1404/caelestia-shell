@@ -16,11 +16,11 @@ StyledRect {
     required property DrawerVisibilities visibilities
 
     readonly property StyledText body: (expandedContent.item as ExpandedBody)?.body ?? null
-    readonly property real nonAnimHeight: expanded ? summary.implicitHeight + expandedContent.implicitHeight + expandedContent.anchors.topMargin + Tokens.padding.medium * 2 : summaryHeightMetrics.height
+    readonly property real nonAnimHeight: expanded ? summary.implicitHeight + expandedContent.implicitHeight + expandedContent.anchors.topMargin + Tokens.padding.normal * 2 : summaryHeightMetrics.height
 
     implicitHeight: nonAnimHeight
 
-    radius: Tokens.rounding.medium
+    radius: Tokens.rounding.small
     color: {
         const c = root.modelData?.urgency === "critical" ? Colours.palette.m3secondaryContainer : Colours.layer(Colours.palette.m3surfaceContainerHigh, 2);
         return expanded ? c : Qt.alpha(c, 0);
@@ -32,12 +32,12 @@ StyledRect {
         name: "expanded"
 
         PropertyChanges {
-            summary.anchors.margins: root.Tokens.padding.medium
-            dummySummary.anchors.margins: root.Tokens.padding.medium
-            compactBody.anchors.margins: root.Tokens.padding.medium
-            timeStr.anchors.margins: root.Tokens.padding.medium
-            expandedContent.anchors.margins: root.Tokens.padding.medium
-            summary.width: root.width - root.Tokens.padding.medium * 2 - timeStr.implicitWidth - root.Tokens.spacing.small
+            summary.anchors.margins: root.Tokens.padding.normal
+            dummySummary.anchors.margins: root.Tokens.padding.normal
+            compactBody.anchors.margins: root.Tokens.padding.normal
+            timeStr.anchors.margins: root.Tokens.padding.normal
+            expandedContent.anchors.margins: root.Tokens.padding.normal
+            summary.width: root.width - root.Tokens.padding.normal * 2 - timeStr.implicitWidth - root.Tokens.spacing.small
             summary.maximumLineCount: Number.MAX_SAFE_INTEGER
         }
     }
@@ -106,7 +106,7 @@ StyledRect {
             animate: true
             text: root.modelData?.timeStr ?? ""
             color: Colours.palette.m3outline
-            font: Tokens.font.body.small
+            font.pointSize: Tokens.font.size.small
         }
     }
 
@@ -117,19 +117,21 @@ StyledRect {
         anchors.top: summary.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: Tokens.spacing.extraSmall
+        anchors.topMargin: Tokens.spacing.small / 2
 
         sourceComponent: ExpandedBody {}
     }
 
     Behavior on implicitHeight {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 
     component ExpandedBody: ColumnLayout {
         readonly property alias body: bodyText
 
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.smaller
 
         StyledText {
             id: bodyText
@@ -180,7 +182,6 @@ StyledRect {
                         property: "active"
                     }
                     Anim {
-                        type: Anim.DefaultEffects
                         property: "opacity"
                     }
                 }
@@ -191,7 +192,6 @@ StyledRect {
 
                 SequentialAnimation {
                     Anim {
-                        type: Anim.DefaultEffects
                         property: "opacity"
                     }
                     PropertyAction {

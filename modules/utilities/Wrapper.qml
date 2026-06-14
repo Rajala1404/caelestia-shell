@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Caelestia
 import Caelestia.Config
 import qs.components
 import qs.modules.sidebar as Sidebar
@@ -25,14 +24,12 @@ Item {
         reloadableId: "utilities"
     }
     readonly property bool shouldBeActive: visibilities.sidebar || (visibilities.utilities && Config.utilities.enabled && !(visibilities.session && Config.session.enabled))
-    readonly property real totalPadding: content.anchors.margins + CUtils.clamp(content.anchors.margins - Config.border.thickness, 0, content.anchors.margins)
-    readonly property real nonAnimHeight: ((content.item as Content)?.nonAnimHeight ?? 0) + totalPadding
     property real offsetScale: shouldBeActive ? 0 : 1
     property real sidebarLerp
 
     visible: offsetScale < 1
     anchors.bottomMargin: (-implicitHeight - 5) * offsetScale
-    implicitHeight: content.implicitHeight + totalPadding
+    implicitHeight: content.implicitHeight + content.anchors.margins * 2
     implicitWidth: sidebar.width * (1 - sidebar.offsetScale) * horizontalStretch * sidebarLerp + Tokens.sizes.utilities.width * (1 - sidebarLerp)
     opacity: 1 - offsetScale
 
@@ -67,7 +64,9 @@ Item {
     ]
 
     Behavior on offsetScale {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 
     Loader {
@@ -81,7 +80,7 @@ Item {
         active: root.shouldBeActive || root.visible
 
         sourceComponent: Content {
-            implicitWidth: root.implicitWidth - root.totalPadding
+            implicitWidth: root.implicitWidth - content.anchors.margins * 2
             props: root.props
             visibilities: root.visibilities
             popouts: root.popouts

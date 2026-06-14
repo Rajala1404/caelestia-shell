@@ -16,7 +16,7 @@ Item {
     readonly property bool shouldBeActive: visibilities.launcher && Config.launcher.enabled
 
     readonly property real maxHeight: {
-        let max = screen.height - Config.border.thickness * 2 + Tokens.padding.extraLarge;
+        let max = screen.height - Config.border.thickness * 2 - Tokens.spacing.large;
         if (visibilities.dashboard)
             max -= panels.dashboard.nonAnimHeight;
         return max;
@@ -40,7 +40,9 @@ Item {
     Component.onCompleted: Qt.callLater(() => Apps) // Load apps on init
 
     Behavior on offsetScale {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 
     Loader {

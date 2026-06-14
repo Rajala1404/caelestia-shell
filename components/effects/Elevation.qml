@@ -13,8 +13,6 @@ RectangularShadow {
     offset.y: dp / 2
 
     Behavior on dp {
-        Anim {
-            type: Anim.SlowEffects
-        }
+        Anim {}
     }
 }

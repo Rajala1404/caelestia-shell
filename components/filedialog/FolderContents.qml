@@ -1,13 +1,13 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Caelestia.Config
 import Caelestia.Models
 import qs.components
 import qs.components.controls
-import qs.components.effects
 import qs.components.filedialog
 import qs.components.images
 import qs.services
@@ -24,9 +24,12 @@ Item {
         color: Colours.tPalette.m3surfaceContainer
 
         layer.enabled: true
-        layer.effect: Mask {
+        layer.effect: MultiEffect {
             maskSource: mask
+            maskEnabled: true
             maskInverted: true
+            maskThresholdMin: 0.5
+            maskSpreadAtMin: 1
         }
     }
 
@@ -39,8 +42,8 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            anchors.margins: Tokens.padding.extraSmall
-            radius: Tokens.rounding.medium
+            anchors.margins: Tokens.padding.small
+            radius: Tokens.rounding.small
         }
     }
 
@@ -56,20 +59,20 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 text: "scan_delete"
                 color: Colours.palette.m3outline
-                fontStyle: Tokens.font.icon.builders.extraLarge.scale(2).weight(Font.Medium).build()
+                font.pointSize: Tokens.font.size.extraLarge * 2
+                font.weight: 500
             }
 
             StyledText {
                 text: qsTr("This folder is empty")
                 color: Colours.palette.m3outline
-                font: Tokens.font.body.builders.large.weight(Font.Medium).build()
+                font.pointSize: Tokens.font.size.large
+                font.weight: 500
             }
         }
 
         Behavior on opacity {
-            Anim {
-                type: Anim.DefaultEffects
-            }
+            Anim {}
         }
     }
 
@@ -77,10 +80,10 @@ Item {
         id: view
 
         anchors.fill: parent
-        anchors.margins: Tokens.padding.extraSmall + Tokens.padding.medium
+        anchors.margins: Tokens.padding.small + Tokens.padding.normal
 
         cellWidth: Sizes.itemWidth + Tokens.spacing.small
-        cellHeight: Sizes.itemWidth + Tokens.spacing.large + Tokens.padding.medium * 2 + 1
+        cellHeight: Sizes.itemWidth + Tokens.spacing.small * 2 + Tokens.padding.normal * 2 + 1
 
         clip: true
         focus: true
@@ -117,12 +120,12 @@ Item {
                 properties: "opacity,scale"
                 from: 0
                 to: 1
+                type: Anim.DefaultSpatial
             }
         }
 
         remove: Transition {
             Anim {
-                type: Anim.DefaultEffects
                 property: "opacity"
                 to: 0
             }
@@ -134,13 +137,13 @@ Item {
 
         displaced: Transition {
             Anim {
-                type: Anim.DefaultEffects
                 properties: "opacity,scale"
                 to: 1
                 easing: Tokens.anim.standardDecel
             }
             Anim {
                 properties: "x,y"
+                type: Anim.DefaultSpatial
             }
         }
     }
@@ -148,7 +151,7 @@ Item {
     CurrentItem {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: Tokens.padding.extraSmall
+        anchors.margins: Tokens.padding.small
 
         currentItem: view.currentItem
     }
@@ -159,12 +162,12 @@ Item {
         required property int index
         required property FileSystemEntry modelData
 
-        readonly property real nonAnimHeight: icon.implicitHeight + name.anchors.topMargin + name.implicitHeight + Tokens.padding.medium * 2
+        readonly property real nonAnimHeight: icon.implicitHeight + name.anchors.topMargin + name.implicitHeight + Tokens.padding.normal * 2
 
         implicitWidth: Sizes.itemWidth
         implicitHeight: nonAnimHeight
 
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         color: Qt.alpha(Colours.tPalette.m3surfaceContainerHighest, GridView.isCurrentItem ? Colours.tPalette.m3surfaceContainerHighest.a : 0)
         z: GridView.isCurrentItem || implicitHeight !== nonAnimHeight ? 1 : 0
         clip: true
@@ -184,9 +187,9 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-            anchors.topMargin: Tokens.padding.medium
+            anchors.topMargin: Tokens.padding.normal
 
-            implicitSize: Sizes.itemWidth - Tokens.padding.medium * 2
+            implicitSize: Sizes.itemWidth - Tokens.padding.normal * 2
 
             Component.onCompleted: {
                 const file = item.modelData;
@@ -208,7 +211,7 @@ Item {
             anchors.right: parent.right
             anchors.top: icon.bottom
             anchors.topMargin: Tokens.spacing.small
-            anchors.margins: Tokens.padding.medium
+            anchors.margins: Tokens.padding.normal
 
             horizontalAlignment: Text.AlignHCenter
             elide: item.GridView.isCurrentItem ? Text.ElideNone : Text.ElideRight

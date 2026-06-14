@@ -1,75 +1,87 @@
 import QtQuick
-import QtQuick.Layouts
 import Caelestia.Config
-import Caelestia.Services
 import qs.components
-import qs.components.controls
+import qs.components.misc
 import qs.services
 
-Item {
+Row {
     id: root
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
 
-    implicitWidth: layout.implicitWidth + layout.anchors.margins * 2
+    padding: Tokens.padding.large
+    spacing: Tokens.spacing.normal
 
-    ServiceRef {
-        service: Cpu
+    Ref {
+        service: SystemUsage
     }
 
-    ServiceRef {
-        service: Memory
+    Resource {
+        icon: "memory"
+        value: SystemUsage.cpuPerc
+        colour: Colours.palette.m3primary
     }
 
-    ServiceRef {
-        service: Storage
+    Resource {
+        icon: "memory_alt"
+        value: SystemUsage.memPerc
+        colour: Colours.palette.m3secondary
     }
 
-    ColumnLayout {
-        id: layout
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.margins: Tokens.padding.large
-        spacing: Tokens.spacing.medium
-
-        Resource {
-            icon: "memory"
-            value: Cpu.percentage
-        }
-
-        Resource {
-            icon: "memory_alt"
-            value: Memory.percentage
-            fgColour: Colours.palette.m3tertiary
-        }
-
-        Resource {
-            icon: "hard_disk"
-            value: Storage.percentage
-            fgColour: Colours.palette.m3secondary
-        }
+    Resource {
+        icon: "hard_disk"
+        value: SystemUsage.storagePerc
+        colour: Colours.palette.m3tertiary
     }
-    component Resource: CircularProgress {
+
+    component Resource: Item {
         id: res
 
         required property string icon
+        required property real value
+        required property color colour
 
-        Layout.fillHeight: true
-        implicitSize: height
-        strokeWidth: Tokens.sizes.dashboard.resourceProgressThickness
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: Tokens.padding.large
+        implicitWidth: icon.implicitWidth
 
-        Behavior on clampedVal {
-            Anim {}
+        StyledRect {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.bottom: icon.top
+            anchors.bottomMargin: Tokens.spacing.small
+
+            implicitWidth: Tokens.sizes.dashboard.resourceProgressThickness
+
+            color: Colours.layer(Colours.palette.m3surfaceContainerHigh, 2)
+            radius: Tokens.rounding.full
+
+            StyledRect {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                implicitHeight: res.value * parent.height
+
+                color: res.colour
+                radius: Tokens.rounding.full
+            }
         }
 
         MaterialIcon {
-            anchors.centerIn: parent
+            id: icon
+
+            anchors.bottom: parent.bottom
+
             text: res.icon
-            font: Tokens.font.icon.large
-            color: res.fgColour
+            color: res.colour
+        }
+
+        Behavior on value {
+            Anim {
+                type: Anim.StandardLarge
+            }
         }
     }
 }

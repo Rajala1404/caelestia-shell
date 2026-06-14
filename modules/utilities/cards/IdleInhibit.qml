@@ -8,12 +8,10 @@ import qs.services
 StyledRect {
     id: root
 
-    readonly property real nonAnimHeight: layout.implicitHeight + (IdleInhibitor.enabled ? activeChip.implicitHeight + activeChip.anchors.topMargin : 0) + Tokens.padding.extraLargeIncreased
-
     Layout.fillWidth: true
-    implicitHeight: nonAnimHeight
+    implicitHeight: layout.implicitHeight + (IdleInhibitor.enabled ? activeChip.implicitHeight + activeChip.anchors.topMargin : 0) + Tokens.padding.large * 2
 
-    radius: Tokens.rounding.large
+    radius: Tokens.rounding.normal
     color: Colours.tPalette.m3surfaceContainer
     clip: true
 
@@ -24,11 +22,11 @@ StyledRect {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: Tokens.padding.large
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
         StyledRect {
             implicitWidth: implicitHeight
-            implicitHeight: icon.implicitHeight + Tokens.padding.large
+            implicitHeight: icon.implicitHeight + Tokens.padding.smaller * 2
 
             radius: Tokens.rounding.full
             color: IdleInhibitor.enabled ? Colours.palette.m3secondary : Colours.palette.m3secondaryContainer
@@ -39,7 +37,7 @@ StyledRect {
                 anchors.centerIn: parent
                 text: "coffee"
                 color: IdleInhibitor.enabled ? Colours.palette.m3onSecondary : Colours.palette.m3onSecondaryContainer
-                fontStyle: Tokens.font.icon.large
+                font.pointSize: Tokens.font.size.large
             }
         }
 
@@ -50,7 +48,7 @@ StyledRect {
             StyledText {
                 Layout.fillWidth: true
                 text: qsTr("Keep Awake")
-                font: Tokens.font.body.medium
+                font.pointSize: Tokens.font.size.normal
                 elide: Text.ElideRight
             }
 
@@ -58,7 +56,7 @@ StyledRect {
                 Layout.fillWidth: true
                 text: IdleInhibitor.enabled ? qsTr("Preventing sleep mode") : qsTr("Normal power management")
                 color: Colours.palette.m3onSurfaceVariant
-                font: Tokens.font.body.small
+                font.pointSize: Tokens.font.size.small
                 elide: Text.ElideRight
             }
         }
@@ -75,7 +73,7 @@ StyledRect {
         asynchronous: true
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.topMargin: Tokens.spacing.large
+        anchors.topMargin: Tokens.spacing.larger
         anchors.bottomMargin: IdleInhibitor.enabled ? Tokens.padding.large : -implicitHeight
         anchors.leftMargin: Tokens.padding.large
 
@@ -85,8 +83,8 @@ StyledRect {
         Component.onCompleted: active = Qt.binding(() => opacity > 0)
 
         sourceComponent: StyledRect {
-            implicitWidth: activeText.implicitWidth + Tokens.padding.medium * 2
-            implicitHeight: activeText.implicitHeight + Tokens.padding.small
+            implicitWidth: activeText.implicitWidth + Tokens.padding.normal * 2
+            implicitHeight: activeText.implicitHeight + Tokens.padding.small * 2
 
             radius: Tokens.rounding.full
             color: Colours.palette.m3primary
@@ -97,12 +95,14 @@ StyledRect {
                 anchors.centerIn: parent
                 text: qsTr("Active since %1").arg(Qt.formatTime(IdleInhibitor.enabledSince, GlobalConfig.services.useTwelveHourClock ? "hh:mm a" : "hh:mm"))
                 color: Colours.palette.m3onPrimary
-                font: Tokens.font.body.builders.small.size(Math.round(Tokens.font.body.small.pointSize * 0.9)).build()
+                font.pointSize: Math.round(Tokens.font.size.small * 0.9)
             }
         }
 
         Behavior on anchors.bottomMargin {
-            Anim {}
+            Anim {
+                type: Anim.DefaultSpatial
+            }
         }
 
         Behavior on opacity {
@@ -117,6 +117,8 @@ StyledRect {
     }
 
     Behavior on implicitHeight {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 }

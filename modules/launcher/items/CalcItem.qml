@@ -28,7 +28,7 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         onClicked: root.onClicked()
     }
 
@@ -36,13 +36,13 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.margins: Tokens.padding.medium
+        anchors.margins: Tokens.padding.larger
 
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
         MaterialIcon {
             text: "function"
-            fontStyle: Tokens.font.icon.extraLarge
+            font.pointSize: Tokens.font.size.extraLarge
             Layout.alignment: Qt.AlignVCenter
         }
 
@@ -66,11 +66,11 @@ Item {
 
         StyledRect {
             color: Colours.palette.m3tertiary
-            radius: Tokens.rounding.large
+            radius: Tokens.rounding.normal
             clip: true
 
-            implicitWidth: (stateLayer.containsMouse ? label.implicitWidth + label.anchors.rightMargin : 0) + icon.implicitWidth + Tokens.padding.medium * 2
-            implicitHeight: Math.max(label.implicitHeight, icon.implicitHeight) + Tokens.padding.small
+            implicitWidth: (stateLayer.containsMouse ? label.implicitWidth + label.anchors.rightMargin : 0) + icon.implicitWidth + Tokens.padding.normal * 2
+            implicitHeight: Math.max(label.implicitHeight, icon.implicitHeight) + Tokens.padding.small * 2
 
             Layout.alignment: Qt.AlignVCenter
 
@@ -78,7 +78,7 @@ Item {
                 id: stateLayer
 
                 onClicked: {
-                    Quickshell.execDetached(["app2unit", "--", ...GlobalConfig.general.apps.terminal, "fish", "-C", `exec qalc -i '${root.math}'`]);
+                    Quickshell.execDetached(["app2unit", "--", ...Config.general.apps.terminal, "fish", "-C", `exec qalc -i '${root.math}'`]);
                     root.list.visibilities.launcher = false;
                 }
 
@@ -94,14 +94,12 @@ Item {
 
                 text: qsTr("Open in calculator")
                 color: Colours.palette.m3onTertiary
-                font: Tokens.font.label.medium
+                font.pointSize: Tokens.font.size.normal
 
                 opacity: stateLayer.containsMouse ? 1 : 0
 
                 Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
+                    Anim {}
                 }
             }
 
@@ -110,11 +108,11 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: Tokens.padding.medium
+                anchors.rightMargin: Tokens.padding.normal
 
                 text: "open_in_new"
                 color: Colours.palette.m3onTertiary
-                fontStyle: Tokens.font.icon.large
+                font.pointSize: Tokens.font.size.large
             }
 
             Behavior on implicitWidth {

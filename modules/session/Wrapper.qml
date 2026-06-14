@@ -22,7 +22,9 @@ Item {
     opacity: 1 - offsetScale
 
     Behavior on offsetScale {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 
     Loader {

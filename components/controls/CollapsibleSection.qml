@@ -24,7 +24,7 @@ ColumnLayout {
         id: sectionHeaderItem
 
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(titleRow.implicitHeight + Tokens.padding.medium * 2, 48)
+        Layout.preferredHeight: Math.max(titleRow.implicitHeight + Tokens.padding.normal * 2, 48)
 
         RowLayout {
             id: titleRow
@@ -32,13 +32,14 @@ ColumnLayout {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: Tokens.padding.medium
-            anchors.rightMargin: Tokens.padding.medium
-            spacing: Tokens.spacing.medium
+            anchors.leftMargin: Tokens.padding.normal
+            anchors.rightMargin: Tokens.padding.normal
+            spacing: Tokens.spacing.normal
 
             StyledText {
                 text: root.title
-                font: Tokens.font.title.builders.medium.weight(Font.Medium).build()
+                font.pointSize: Tokens.font.size.larger
+                font.weight: 500
             }
 
             Item {
@@ -49,7 +50,7 @@ ColumnLayout {
                 text: "expand_more"
                 rotation: root.expanded ? 180 : 0
                 color: Colours.palette.m3onSurfaceVariant
-                fontStyle: Tokens.font.icon.medium
+                font.pointSize: Tokens.font.size.normal
 
                 Behavior on rotation {
                     Anim {
@@ -62,7 +63,7 @@ ColumnLayout {
         StateLayer {
             anchors.fill: parent
             color: Colours.palette.m3onSurface
-            radius: Tokens.rounding.large
+            radius: Tokens.rounding.normal
             showHoverBackground: false
             onClicked: {
                 root.toggleRequested();
@@ -75,7 +76,7 @@ ColumnLayout {
         id: contentWrapper
 
         Layout.fillWidth: true
-        Layout.preferredHeight: root.expanded ? (contentColumn.implicitHeight + Tokens.spacing.large) : 0
+        Layout.preferredHeight: root.expanded ? (contentColumn.implicitHeight + Tokens.spacing.small * 2) : 0
         clip: true
 
         Behavior on Layout.preferredHeight {
@@ -86,15 +87,13 @@ ColumnLayout {
             id: backgroundRect
 
             anchors.fill: parent
-            radius: Tokens.rounding.large
+            radius: Tokens.rounding.normal
             color: Colours.transparency.enabled ? Colours.layer(Colours.palette.m3surfaceContainer, root.nested ? 3 : 2) : (root.nested ? Colours.palette.m3surfaceContainerHigh : Colours.palette.m3surfaceContainer)
             opacity: root.showBackground && root.expanded ? 1.0 : 0.0
             visible: root.showBackground
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
         }
 
@@ -104,28 +103,26 @@ ColumnLayout {
             anchors.left: parent.left
             anchors.right: parent.right
             y: Tokens.spacing.small
-            anchors.leftMargin: Tokens.padding.medium
-            anchors.rightMargin: Tokens.padding.medium
+            anchors.leftMargin: Tokens.padding.normal
+            anchors.rightMargin: Tokens.padding.normal
             anchors.bottomMargin: Tokens.spacing.small
             spacing: Tokens.spacing.small
             opacity: root.expanded ? 1.0 : 0.0
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
 
             StyledText {
                 id: descriptionText
 
                 Layout.fillWidth: true
-                Layout.topMargin: root.description !== "" ? Tokens.spacing.medium : 0
+                Layout.topMargin: root.description !== "" ? Tokens.spacing.smaller : 0
                 Layout.bottomMargin: root.description !== "" ? Tokens.spacing.small : 0
                 visible: root.description !== ""
                 text: root.description
                 color: Colours.palette.m3onSurfaceVariant
-                font: Tokens.font.body.small
+                font.pointSize: Tokens.font.size.small
                 wrapMode: Text.Wrap
             }
         }

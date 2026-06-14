@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import Caelestia
 import Caelestia.Config
 import qs.components
 
@@ -20,7 +19,9 @@ Item {
     opacity: 1 - offsetScale
 
     Behavior on offsetScale {
-        Anim {}
+        Anim {
+            type: Anim.DefaultSpatial
+        }
     }
 
     Loader {
@@ -29,14 +30,13 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.leftMargin: Tokens.padding.large
-        anchors.margins: CUtils.clamp(anchors.leftMargin - Config.border.thickness, 0, anchors.leftMargin)
+        anchors.margins: Tokens.padding.large
         anchors.bottomMargin: 0
 
         active: root.shouldBeActive || root.visible
 
         sourceComponent: Content {
-            implicitWidth: Tokens.sizes.sidebar.width - content.anchors.leftMargin - content.anchors.margins
+            implicitWidth: Tokens.sizes.sidebar.width - Tokens.padding.large * 2
             props: root.props
             visibilities: root.visibilities
         }

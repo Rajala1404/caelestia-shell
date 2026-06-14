@@ -45,7 +45,7 @@ StackView {
         property bool isSubMenu
         property bool shown
 
-        padding: Tokens.padding.small
+        padding: Tokens.padding.smaller
         spacing: Tokens.spacing.small
 
         opacity: shown ? 1 : 0
@@ -57,9 +57,7 @@ StackView {
         StackView.onRemoved: destroy()
 
         Behavior on opacity {
-            Anim {
-                type: Anim.DefaultEffects
-            }
+            Anim {}
         }
 
         Behavior on scale {
@@ -99,9 +97,9 @@ StackView {
                         implicitHeight: label.implicitHeight
 
                         StateLayer {
-                            anchors.margins: -Tokens.padding.extraSmall / 2
-                            anchors.leftMargin: -Tokens.padding.small
-                            anchors.rightMargin: -Tokens.padding.small
+                            anchors.margins: -Tokens.padding.small / 2
+                            anchors.leftMargin: -Tokens.padding.smaller
+                            anchors.rightMargin: -Tokens.padding.smaller
 
                             radius: item.radius
                             disabled: !item.modelData.enabled
@@ -140,7 +138,7 @@ StackView {
                             id: label
 
                             anchors.left: icon.right
-                            anchors.leftMargin: icon.active ? Tokens.spacing.medium : 0
+                            anchors.leftMargin: icon.active ? Tokens.spacing.smaller : 0
 
                             text: labelMetrics.elidedText
                             color: item.modelData.enabled ? Colours.palette.m3onSurface : Colours.palette.m3outline
@@ -150,10 +148,11 @@ StackView {
                             id: labelMetrics
 
                             text: item.modelData.text
-                            font: label.font
+                            font.pointSize: label.font.pointSize
+                            font.family: label.font.family
 
                             elide: Text.ElideRight
-                            elideWidth: root.Tokens.sizes.bar.trayMenuWidth - (icon.active ? icon.implicitWidth + label.anchors.leftMargin : 0) - (expand.active ? expand.implicitWidth + root.Tokens.spacing.medium : 0)
+                            elideWidth: root.Tokens.sizes.bar.trayMenuWidth - (icon.active ? icon.implicitWidth + label.anchors.leftMargin : 0) - (expand.active ? expand.implicitWidth + root.Tokens.spacing.normal : 0)
                         }
 
                         Loader {
@@ -181,7 +180,7 @@ StackView {
 
             sourceComponent: Item {
                 implicitWidth: back.implicitWidth
-                implicitHeight: back.implicitHeight + Tokens.spacing.extraSmall
+                implicitHeight: back.implicitHeight + Tokens.spacing.small / 2
 
                 Item {
                     anchors.bottom: parent.bottom
@@ -190,9 +189,9 @@ StackView {
 
                     StyledRect {
                         anchors.fill: parent
-                        anchors.margins: -Tokens.padding.extraSmall / 2
-                        anchors.leftMargin: -Tokens.padding.small
-                        anchors.rightMargin: -Tokens.padding.large
+                        anchors.margins: -Tokens.padding.small / 2
+                        anchors.leftMargin: -Tokens.padding.smaller
+                        anchors.rightMargin: -Tokens.padding.smaller * 2
 
                         radius: Tokens.rounding.full
                         color: Colours.palette.m3secondaryContainer

@@ -14,22 +14,23 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.CLIENT_ID }}
+          app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
 
       - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v34
+        uses: nixbuild/nix-quick-install-action@v31
         with:
           nix_conf: |
             keep-env-derivations = true
             keep-outputs = true
 
       - name: Restore and save Nix store
-        uses: nix-community/cache-nix-action@v7
+        uses: nix-community/cache-nix-action@v6
         with:
           # restore and save a cache using this key
           primary-key: nix-${{ hashFiles('**/*.nix', '**/flake.lock') }}
@@ -84,7 +85,7 @@ jobs:
 
       - name: Commit and push changes
         if: steps.check.outputs.modified == 'true'
-        uses: EndBug/add-and-commit@v10
+        uses: EndBug/add-and-commit@v9
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           add: flake.lock

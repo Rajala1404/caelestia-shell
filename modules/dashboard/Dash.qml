@@ -12,16 +12,16 @@ GridLayout {
     required property DashboardState dashState
     required property FileDialog facePicker
 
-    rowSpacing: Tokens.spacing.medium
-    columnSpacing: Tokens.spacing.medium
+    rowSpacing: Tokens.spacing.normal
+    columnSpacing: Tokens.spacing.normal
 
     Rect {
         Layout.column: 2
         Layout.columnSpan: 3
-        Layout.preferredWidth: Tokens.sizes.dashboard.userWidth
-        Layout.fillHeight: true
+        Layout.preferredWidth: user.implicitWidth
+        Layout.preferredHeight: user.implicitHeight
 
-        radius: Tokens.rounding.extraLarge
+        radius: Tokens.rounding.large
 
         User {
             id: user
@@ -35,13 +35,11 @@ GridLayout {
         Layout.row: 0
         Layout.columnSpan: 2
         Layout.preferredWidth: Tokens.sizes.dashboard.weatherWidth
-        Layout.preferredHeight: weather.implicitHeight
+        Layout.fillHeight: true
 
-        radius: Tokens.rounding.extraLarge * 1.5
+        radius: Tokens.rounding.large * 1.5
 
-        SmallWeather {
-            id: weather
-        }
+        SmallWeather {}
     }
 
     Rect {
@@ -49,7 +47,7 @@ GridLayout {
         Layout.preferredWidth: dateTime.implicitWidth
         Layout.fillHeight: true
 
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
 
         DateTime {
             id: dateTime
@@ -63,7 +61,7 @@ GridLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: calendar.implicitHeight
 
-        radius: Tokens.rounding.extraLarge
+        radius: Tokens.rounding.large
 
         Calendar {
             id: calendar
@@ -78,7 +76,7 @@ GridLayout {
         Layout.preferredWidth: resources.implicitWidth
         Layout.fillHeight: true
 
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
 
         Resources {
             id: resources
@@ -92,7 +90,7 @@ GridLayout {
         Layout.preferredWidth: media.implicitWidth
         Layout.fillHeight: true
 
-        radius: Tokens.rounding.extraLarge * 2
+        radius: Tokens.rounding.large * 2
 
         Media {
             id: media

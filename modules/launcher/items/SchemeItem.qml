@@ -16,15 +16,15 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         onClicked: root.modelData?.onClicked(root.list)
     }
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: Tokens.padding.medium
-        anchors.rightMargin: Tokens.padding.medium
-        anchors.margins: Tokens.padding.small
+        anchors.leftMargin: Tokens.padding.larger
+        anchors.rightMargin: Tokens.padding.larger
+        anchors.margins: Tokens.padding.smaller
 
         StyledRect {
             id: preview
@@ -61,20 +61,20 @@ Item {
 
         Column {
             anchors.left: preview.right
-            anchors.leftMargin: Tokens.spacing.medium
+            anchors.leftMargin: Tokens.spacing.normal
             anchors.verticalCenter: parent.verticalCenter
 
-            width: parent.width - preview.width - anchors.leftMargin - (current.active ? current.width + Tokens.spacing.medium : 0)
+            width: parent.width - preview.width - anchors.leftMargin - (current.active ? current.width + Tokens.spacing.normal : 0)
             spacing: 0
 
             StyledText {
                 text: root.modelData?.flavour ?? ""
-                font: Tokens.font.body.medium
+                font.pointSize: Tokens.font.size.normal
             }
 
             StyledText {
                 text: root.modelData?.name ?? ""
-                font: Tokens.font.body.small
+                font.pointSize: Tokens.font.size.small
                 color: Colours.palette.m3outline
 
                 elide: Text.ElideRight
@@ -95,7 +95,7 @@ Item {
             sourceComponent: MaterialIcon {
                 text: "check"
                 color: Colours.palette.m3onSurfaceVariant
-                fontStyle: Tokens.font.icon.large
+                font.pointSize: Tokens.font.size.large
             }
         }
     }

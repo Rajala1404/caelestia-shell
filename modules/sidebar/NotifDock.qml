@@ -20,7 +20,7 @@ Item {
     readonly property int notifCount: Notifs.list.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
 
     anchors.fill: parent
-    anchors.margins: Tokens.padding.medium
+    anchors.margins: Tokens.padding.normal
 
     Component.onCompleted: Notifs.list.forEach(n => n.popup = false)
 
@@ -30,7 +30,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Tokens.padding.extraSmall
+        anchors.margins: Tokens.padding.small
 
         implicitHeight: Math.max(count.implicitHeight, titleText.implicitHeight)
 
@@ -44,16 +44,16 @@ Item {
 
             text: root.notifCount
             color: Colours.palette.m3outline
-            font: Tokens.font.label.large
+            font.pointSize: Tokens.font.size.normal
+            font.family: Tokens.font.family.mono
+            font.weight: 500
 
             Behavior on anchors.leftMargin {
                 Anim {}
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
         }
 
@@ -63,11 +63,13 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: count.right
             anchors.right: parent.right
-            anchors.leftMargin: Tokens.spacing.extraSmall
+            anchors.leftMargin: Tokens.spacing.small
 
             text: root.notifCount > 0 ? qsTr("notification%1").arg(root.notifCount === 1 ? "" : "s") : qsTr("Notifications")
             color: Colours.palette.m3outline
-            font: Tokens.font.label.large
+            font.pointSize: Tokens.font.size.normal
+            font.family: Tokens.font.family.mono
+            font.weight: 500
             elide: Text.ElideRight
         }
     }
@@ -79,9 +81,9 @@ Item {
         anchors.right: parent.right
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: Tokens.spacing.medium
+        anchors.topMargin: Tokens.spacing.smaller
 
-        radius: Tokens.rounding.medium
+        radius: Tokens.rounding.small
         color: "transparent"
 
         Loader {
@@ -91,7 +93,7 @@ Item {
             opacity: root.notifCount > 0 ? 0 : 1
 
             sourceComponent: ColumnLayout {
-                spacing: Tokens.spacing.extraLarge
+                spacing: Tokens.spacing.large
 
                 Image {
                     asynchronous: true
@@ -108,9 +110,11 @@ Item {
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: qsTr("All up to date!")
+                    text: qsTr("No Notifications")
                     color: Colours.palette.m3outlineVariant
-                    font: Tokens.font.headline.builders.small.width(90).build()
+                    font.pointSize: Tokens.font.size.large
+                    font.family: Tokens.font.family.mono
+                    font.weight: 500
                 }
             }
 
@@ -174,7 +178,7 @@ Item {
         asynchronous: true
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: Tokens.padding.medium
+        anchors.margins: Tokens.padding.normal
 
         scale: root.notifCount > 0 ? 1 : 0.5
         opacity: root.notifCount > 0 ? 1 : 0
@@ -184,7 +188,9 @@ Item {
             id: clearBtn
 
             icon: "clear_all"
-            font: Tokens.font.icon.large
+            radius: Tokens.rounding.normal
+            padding: Tokens.padding.normal
+            font.pointSize: Math.round(Tokens.font.size.large * 1.2)
             onClicked: clearTimer.start()
 
             Elevation {
@@ -203,7 +209,7 @@ Item {
 
         Behavior on opacity {
             Anim {
-                type: Anim.DefaultEffects
+                duration: Tokens.anim.durations.expressiveFastSpatial
             }
         }
     }

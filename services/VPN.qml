@@ -289,7 +289,9 @@ Singleton {
             Toaster.toast(qsTr("VPN connected"), qsTr("Connected to %1").arg(displayName), "vpn_key");
             break;
         case "disconnected":
-            Toaster.toast(qsTr("VPN disconnected"), qsTr("Disconnected from %1").arg(displayName), "vpn_key_off");
+            if (status.connected) {
+                Toaster.toast(qsTr("VPN disconnected"), qsTr("Disconnected from %1").arg(displayName), "vpn_key_off");
+            }
             break;
         case "needs-auth":
             const authMsg = statusObj.reason || "Authentication required";

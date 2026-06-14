@@ -49,8 +49,6 @@ protected:
 
     virtual bool isExcluded(const BlobShape* /*other*/) const { return false; }
 
-    virtual bool isCornerExcluded(const BlobShape* /*other*/) const { return false; }
-
     virtual void cornerRadii(float out[4]) const;
 
     virtual void updatePhysics() {}

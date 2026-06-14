@@ -27,19 +27,19 @@ ColumnLayout {
         onClicked: root.props.recordingListExpanded = !root.props.recordingListExpanded
 
         RowLayout {
-            spacing: Tokens.spacing.medium
+            spacing: Tokens.spacing.smaller
 
             MaterialIcon {
                 Layout.alignment: Qt.AlignVCenter
                 text: "list"
-                fontStyle: Tokens.font.icon.large
+                font.pointSize: Tokens.font.size.large
             }
 
             StyledText {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 text: qsTr("Recordings")
-                font: Tokens.font.body.medium
+                font.pointSize: Tokens.font.size.normal
             }
 
             IconButton {
@@ -62,7 +62,7 @@ ColumnLayout {
 
         Layout.fillWidth: true
         Layout.rightMargin: -Tokens.spacing.small
-        implicitHeight: (Tokens.font.body.large.pointSize + Tokens.padding.small) * (root.props.recordingListExpanded ? 10 : 3)
+        implicitHeight: (Tokens.font.size.larger + Tokens.padding.small) * (root.props.recordingListExpanded ? 10 : 3)
         clip: true
 
         StyledScrollBar.vertical: StyledScrollBar {
@@ -78,13 +78,13 @@ ColumnLayout {
             anchors.left: list.contentItem.left
             anchors.right: list.contentItem.right
             anchors.rightMargin: Tokens.spacing.small
-            spacing: Tokens.spacing.extraSmall
+            spacing: Tokens.spacing.small / 2
 
             Component.onCompleted: baseName = modelData.baseName
 
             StyledText {
                 Layout.fillWidth: true
-                Layout.rightMargin: Tokens.spacing.extraSmall
+                Layout.rightMargin: Tokens.spacing.small / 2
                 text: {
                     const time = recording.baseName;
                     const matches = time.match(/^recording_(\d{4})(\d{2})(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
@@ -104,7 +104,7 @@ ColumnLayout {
                 onClicked: {
                     root.visibilities.utilities = false;
                     root.visibilities.sidebar = false;
-                    Quickshell.execDetached(["app2unit", "--", ...GlobalConfig.general.apps.playback, recording.modelData.path]);
+                    Quickshell.execDetached(["app2unit", "--", ...Config.general.apps.playback, recording.modelData.path]);
                 }
             }
 
@@ -114,7 +114,7 @@ ColumnLayout {
                 onClicked: {
                     root.visibilities.utilities = false;
                     root.visibilities.sidebar = false;
-                    Quickshell.execDetached(["app2unit", "--", ...GlobalConfig.general.apps.explorer, recording.modelData.path]);
+                    Quickshell.execDetached(["app2unit", "--", ...Config.general.apps.explorer, recording.modelData.path]);
                 }
             }
 
@@ -129,25 +129,31 @@ ColumnLayout {
 
         add: Transition {
             Anim {
-                type: Anim.DefaultEffects
                 property: "opacity"
                 from: 0
+                to: 1
+            }
+            Anim {
+                property: "scale"
+                from: 0.5
                 to: 1
             }
         }
 
         remove: Transition {
             Anim {
-                type: Anim.DefaultEffects
                 property: "opacity"
                 to: 0
+            }
+            Anim {
+                property: "scale"
+                to: 0.5
             }
         }
 
         displaced: Transition {
             Anim {
-                type: Anim.DefaultEffects
-                property: "opacity"
+                properties: "opacity,scale"
                 to: 1
             }
             Anim {
@@ -169,16 +175,14 @@ ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                     text: "scan_delete"
                     color: Colours.palette.m3outline
-                    fontStyle: Tokens.font.icon.extraLarge
+                    font.pointSize: Tokens.font.size.extraLarge
 
                     opacity: root.props.recordingListExpanded ? 1 : 0
                     scale: root.props.recordingListExpanded ? 1 : 0
                     Layout.preferredHeight: root.props.recordingListExpanded ? implicitHeight : 0
 
                     Behavior on opacity {
-                        Anim {
-                            type: Anim.DefaultEffects
-                        }
+                        Anim {}
                     }
 
                     Behavior on scale {
@@ -191,7 +195,7 @@ ColumnLayout {
                 }
 
                 RowLayout {
-                    spacing: Tokens.spacing.medium
+                    spacing: Tokens.spacing.smaller
 
                     MaterialIcon {
                         Layout.alignment: Qt.AlignHCenter
@@ -203,9 +207,7 @@ ColumnLayout {
                         Layout.preferredWidth: !root.props.recordingListExpanded ? implicitWidth : 0
 
                         Behavior on opacity {
-                            Anim {
-                                type: Anim.DefaultEffects
-                            }
+                            Anim {}
                         }
 
                         Behavior on scale {
@@ -225,14 +227,14 @@ ColumnLayout {
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
         }
 
         Behavior on implicitHeight {
-            Anim {}
+            Anim {
+                type: Anim.DefaultSpatial
+            }
         }
     }
 }

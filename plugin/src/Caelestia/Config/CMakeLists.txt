@@ -6,8 +6,6 @@ qml_module(caelestia-config
         configobject.cpp
         rootconfig.cpp
         appearanceconfig.cpp
-        font.cpp
-        fontbuilder.cpp
         tokens.cpp
         tokensattached.cpp
         anim.cpp
@@ -15,11 +13,11 @@ qml_module(caelestia-config
         backgroundconfig.hpp
         barconfig.hpp
         borderconfig.hpp
+        controlcenterconfig.hpp
         dashboardconfig.hpp
         generalconfig.hpp
         launcherconfig.hpp
         lockconfig.hpp
-        nexusconfig.hpp
         notifsconfig.hpp
         osdconfig.hpp
         serviceconfig.hpp

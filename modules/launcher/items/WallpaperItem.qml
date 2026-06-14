@@ -22,11 +22,11 @@ Item {
         opacity = Qt.binding(() => PathView.onPath ? 1 : 0);
     }
 
-    implicitWidth: image.width + Tokens.padding.medium * 2
-    implicitHeight: image.height + label.height + Tokens.spacing.extraSmall + Tokens.padding.large + Tokens.padding.medium
+    implicitWidth: image.width + Tokens.padding.larger * 2
+    implicitHeight: image.height + label.height + Tokens.spacing.small / 2 + Tokens.padding.large + Tokens.padding.normal
 
     StateLayer {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         onClicked: {
             Wallpapers.setWallpaper(root.modelData.path);
             root.visibilities.launcher = false;
@@ -40,9 +40,7 @@ Item {
         level: 4
 
         Behavior on opacity {
-            Anim {
-                type: Anim.DefaultEffects
-            }
+            Anim {}
         }
     }
 
@@ -52,7 +50,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         y: Tokens.padding.large
         color: Colours.tPalette.m3surfaceContainer
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
 
         implicitWidth: Tokens.sizes.launcher.wallpaperWidth
         implicitHeight: implicitWidth / 16 * 9
@@ -61,7 +59,8 @@ Item {
             anchors.centerIn: parent
             text: "image"
             color: Colours.tPalette.m3outline
-            fontStyle: Tokens.font.icon.builders.extraLarge.scale(2).weight(Font.DemiBold).build()
+            font.pointSize: Tokens.font.size.extraLarge * 2
+            font.weight: 600
         }
 
         CachingImage {
@@ -79,15 +78,15 @@ Item {
         id: label
 
         anchors.top: image.bottom
-        anchors.topMargin: Tokens.spacing.extraSmall
+        anchors.topMargin: Tokens.spacing.small / 2
         anchors.horizontalCenter: parent.horizontalCenter
 
-        width: image.width - Tokens.padding.medium * 2
+        width: image.width - Tokens.padding.normal * 2
         horizontalAlignment: Text.AlignHCenter
         elide: Text.ElideRight
         renderType: Text.QtRendering
         text: root.modelData.relativePath
-        font: Tokens.font.label.medium
+        font.pointSize: Tokens.font.size.normal
     }
 
     Behavior on scale {
@@ -95,8 +94,6 @@ Item {
     }
 
     Behavior on opacity {
-        Anim {
-            type: Anim.DefaultEffects
-        }
+        Anim {}
     }
 }

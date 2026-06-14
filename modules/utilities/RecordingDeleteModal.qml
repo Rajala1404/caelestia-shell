@@ -43,7 +43,7 @@ Loader {
                 anchors.fill: parent
                 anchors.rightMargin: -parent.width * (1 - root.deformMatrix.m11) / 2 // Additional bit to account for deform
                 anchors.bottomMargin: -parent.height * 0.1 // Additional bit to account for overshoot
-                topLeftRadius: Tokens.rounding.extraLarge
+                topLeftRadius: Tokens.rounding.large
                 color: Colours.palette.m3scrim
             }
 
@@ -138,15 +138,15 @@ Loader {
 
         StyledRect {
             anchors.centerIn: parent
-            radius: Tokens.rounding.extraLarge
+            radius: Tokens.rounding.large
             color: Colours.palette.m3surfaceContainerHigh
 
             scale: 0
             Component.onCompleted: scale = Qt.binding(() => root.props.recordingConfirmDelete ? 1 : 0)
 
-            width: Math.min(parent.width - Tokens.padding.extraLargeIncreased, implicitWidth)
-            implicitWidth: deleteConfirmationLayout.implicitWidth + Tokens.padding.extraExtraLarge
-            implicitHeight: deleteConfirmationLayout.implicitHeight + Tokens.padding.extraExtraLarge
+            width: Math.min(parent.width - Tokens.padding.large * 2, implicitWidth)
+            implicitWidth: deleteConfirmationLayout.implicitWidth + Tokens.padding.large * 3
+            implicitHeight: deleteConfirmationLayout.implicitHeight + Tokens.padding.large * 3
 
             MouseArea {
                 anchors.fill: parent
@@ -164,25 +164,25 @@ Loader {
 
                 anchors.fill: parent
                 anchors.margins: Tokens.padding.large * 1.5
-                spacing: Tokens.spacing.medium
+                spacing: Tokens.spacing.normal
 
                 StyledText {
                     text: qsTr("Delete recording?")
-                    font: Tokens.font.body.large
+                    font.pointSize: Tokens.font.size.large
                 }
 
                 StyledText {
                     Layout.fillWidth: true
                     text: qsTr("Recording '%1' will be permanently deleted.").arg(deleteConfirmation.path)
                     color: Colours.palette.m3onSurfaceVariant
-                    font: Tokens.font.body.small
+                    font.pointSize: Tokens.font.size.small
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
                 RowLayout {
-                    Layout.topMargin: Tokens.spacing.medium
+                    Layout.topMargin: Tokens.spacing.normal
                     Layout.alignment: Qt.AlignRight
-                    spacing: Tokens.spacing.medium
+                    spacing: Tokens.spacing.normal
 
                     TextButton {
                         text: qsTr("Cancel")
@@ -202,14 +202,14 @@ Loader {
             }
 
             Behavior on scale {
-                Anim {}
+                Anim {
+                    type: Anim.DefaultSpatial
+                }
             }
         }
     }
 
     Behavior on opacity {
-        Anim {
-            type: Anim.DefaultEffects
-        }
+        Anim {}
     }
 }

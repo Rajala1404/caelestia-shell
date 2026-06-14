@@ -36,6 +36,7 @@ WlSessionLockSurface {
                 target: lockContent
                 properties: "implicitWidth,implicitHeight"
                 to: lockContent.size
+                type: Anim.DefaultSpatial
             }
             Anim {
                 target: lockBg
@@ -46,6 +47,7 @@ WlSessionLockSurface {
                 target: content
                 property: "scale"
                 to: 0
+                type: Anim.DefaultSpatial
             }
             Anim {
                 target: content
@@ -70,7 +72,6 @@ WlSessionLockSurface {
                     duration: Tokens.anim.durations.small
                 }
                 Anim {
-                    type: Anim.Standard
                     target: lockContent
                     property: "opacity"
                     to: 0
@@ -119,13 +120,11 @@ WlSessionLockSurface {
                     easing: Tokens.anim.standardDecel
                 }
                 Anim {
-                    type: Anim.DefaultEffects
                     target: lockIcon
                     property: "opacity"
                     to: 0
                 }
                 Anim {
-                    type: Anim.DefaultEffects
                     target: content
                     property: "opacity"
                     to: 1
@@ -134,21 +133,24 @@ WlSessionLockSurface {
                     target: content
                     property: "scale"
                     to: 1
+                    type: Anim.DefaultSpatial
                 }
                 Anim {
                     target: lockBg
                     property: "radius"
-                    to: lockContent.Tokens.rounding.extraLarge * 1.5
+                    to: lockContent.Tokens.rounding.large * 1.5
                 }
                 Anim {
                     target: lockContent
                     property: "implicitWidth"
                     to: (root.screen?.height ?? 0) * lockContent.Tokens.sizes.lock.heightMult * lockContent.Tokens.sizes.lock.ratio
+                    type: Anim.DefaultSpatial
                 }
                 Anim {
                     target: lockContent
                     property: "implicitHeight"
                     to: (root.screen?.height ?? 0) * lockContent.Tokens.sizes.lock.heightMult
+                    type: Anim.DefaultSpatial
                 }
             }
         }
@@ -205,7 +207,8 @@ WlSessionLockSurface {
 
             anchors.centerIn: parent
             text: "lock"
-            fontStyle: Tokens.font.icon.builders.extraLarge.scale(4).weight(Font.Bold).build()
+            font.pointSize: Tokens.font.size.extraLarge * 4
+            font.bold: true
             rotation: 180
         }
 
@@ -213,8 +216,8 @@ WlSessionLockSurface {
             id: content
 
             anchors.centerIn: parent
-            width: (root.screen?.height ?? 0) * Tokens.sizes.lock.heightMult * Tokens.sizes.lock.ratio - Tokens.padding.extraLargeIncreased
-            height: (root.screen?.height ?? 0) * Tokens.sizes.lock.heightMult - Tokens.padding.extraLargeIncreased
+            width: (root.screen?.height ?? 0) * Tokens.sizes.lock.heightMult * Tokens.sizes.lock.ratio - Tokens.padding.large * 2
+            height: (root.screen?.height ?? 0) * Tokens.sizes.lock.heightMult - Tokens.padding.large * 2
 
             lock: root
             opacity: 0

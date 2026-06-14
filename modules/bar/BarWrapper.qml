@@ -18,27 +18,26 @@ Item {
     readonly property bool disabled: Strings.testRegexList(Config.bar.excludedScreens, screen.name)
 
     readonly property int clampedHeight: Math.max(Config.border.minThickness, implicitHeight)
-    readonly property int padding: Math.max(Tokens.padding.small, Config.border.thickness)
+    readonly property int padding: Math.max(Tokens.padding.smaller, Config.border.thickness)
     readonly property int contentHeight: Tokens.sizes.bar.innerHeight + padding * 2
-    readonly property int exclusiveZone: !disabled && (Config.bar.persistent || visibilities.bar) ? contentWidth : Config.border.thickness
+    readonly property int exclusiveZone: !disabled && (Config.bar.persistent || visibilities.bar) ? contentHeight : Config.border.thickness
     readonly property bool shouldBeVisible: !fullscreen && !disabled && (Config.bar.persistent || visibilities.bar || isHovered)
-    property bool isHovered    readonly property int contentHeight: Tokens.sizes.bar.innerHeight + padding * 2
-
+    property bool isHovered
 
     function closeTray(): void {
         (content.item as Bar)?.closeTray();
     }
 
-    function checkPopout(y: real): void {
-        (content.item as Bar)?.checkPopout(y);
+    function checkPopout(x: real): void {
+        (content.item as Bar)?.checkPopout(x);
     }
 
-    function handleWheel(y: real, angleDelta: point): void {
-        (content.item as Bar)?.handleWheel(y, angleDelta);
+    function handleWheel(x: real, angleDelta: point): void {
+        (content.item as Bar)?.handleWheel(x, angleDelta);
     }
 
     clip: true
-    visible: height > Config.border.thickness
+    visible: height > 0
     implicitHeight: fullscreen ? 0 : Config.border.thickness
 
     states: State {
@@ -46,7 +45,7 @@ Item {
         when: root.shouldBeVisible
 
         PropertyChanges {
-            root.implicitWidth: root.contentWidth
+            root.implicitHeight: root.contentHeight
         }
     }
 
@@ -58,6 +57,7 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
+                type: Anim.DefaultSpatial
             }
         },
         Transition {
@@ -66,7 +66,7 @@ Item {
 
             Anim {
                 target: root
-                property: "implicitWidth"
+                property: "implicitHeight"
                 type: Anim.Emphasized
             }
         }
@@ -75,14 +75,13 @@ Item {
     Loader {
         id: content
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        anchors.left: parent.left
         anchors.right: parent.right
 
         active: root.shouldBeVisible || root.visible
 
         sourceComponent: Bar {
-            width: root.contentWidth
+            height: root.contentHeight
             screen: root.screen
             visibilities: root.visibilities
             popouts: root.popouts // qmllint disable incompatible-type

@@ -15,8 +15,8 @@ StyledRect {
     property var onValueModified: function (value) {}
 
     Layout.fillWidth: true
-    implicitHeight: row.implicitHeight + Tokens.padding.extraLargeIncreased
-    radius: Tokens.rounding.large
+    implicitHeight: row.implicitHeight + Tokens.padding.large * 2
+    radius: Tokens.rounding.normal
     color: Colours.layer(Colours.palette.m3surfaceContainer, 2)
 
     Behavior on implicitHeight {
@@ -30,7 +30,7 @@ StyledRect {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: Tokens.padding.large
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
         StyledText {
             Layout.fillWidth: true

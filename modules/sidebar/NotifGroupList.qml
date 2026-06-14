@@ -22,7 +22,7 @@ LazyListView {
     anchors.right: parent.right
     implicitHeight: contentHeight
 
-    spacing: Math.round(Tokens.spacing.extraSmall)
+    spacing: Math.round(Tokens.spacing.small / 2)
     asynchronous: true
 
     readyDelay: 1
@@ -107,7 +107,6 @@ LazyListView {
                 onFinished: notif.modelData?.unlock(notif)
 
                 Anim {
-                    type: Anim.DefaultEffects
                     target: notif
                     property: "opacity"
                     to: 0
@@ -132,13 +131,13 @@ LazyListView {
             Behavior on y {
                 enabled: notif.LazyListView.ready
 
-                Anim {}
+                Anim {
+                    type: Anim.DefaultSpatial
+                }
             }
 
             Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
-                }
+                Anim {}
             }
 
             Behavior on scale {
@@ -146,7 +145,9 @@ LazyListView {
             }
 
             Behavior on x {
-                Anim {}
+                Anim {
+                    type: Anim.DefaultSpatial
+                }
             }
         }
     }

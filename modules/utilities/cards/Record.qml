@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Layouts
-import Caelestia.Components
 import Caelestia.Config
 import qs.components
 import qs.components.controls
@@ -13,12 +12,11 @@ StyledRect {
 
     required property var props
     required property DrawerVisibilities visibilities
-    readonly property real nonAnimHeight: btnLayout.implicitHeight + listOrControls.implicitHeight + layout.spacing + layout.anchors.margins * 2
 
     Layout.fillWidth: true
     implicitHeight: layout.implicitHeight + layout.anchors.margins * 2
 
-    radius: Tokens.rounding.large
+    radius: Tokens.rounding.normal
     color: Colours.tPalette.m3surfaceContainer
 
     ColumnLayout {
@@ -26,17 +24,16 @@ StyledRect {
 
         anchors.fill: parent
         anchors.margins: Tokens.padding.large
-        spacing: Tokens.spacing.medium
+        spacing: Tokens.spacing.normal
 
         RowLayout {
-            id: btnLayout
-
-            spacing: Tokens.spacing.medium
+            spacing: Tokens.spacing.normal
+            z: 1
 
             StyledRect {
                 implicitWidth: implicitHeight
                 implicitHeight: {
-                    const h = icon.implicitHeight + Tokens.padding.small * 2;
+                    const h = icon.implicitHeight + Tokens.padding.smaller * 2;
                     return h - (h % 2);
                 }
 
@@ -47,10 +44,11 @@ StyledRect {
                     id: icon
 
                     anchors.centerIn: parent
-                    anchors.verticalCenterOffset: 1
+                    anchors.horizontalCenterOffset: -0.5
+                    anchors.verticalCenterOffset: 1.5
                     text: "screen_record"
                     color: Recorder.running ? Colours.palette.m3onSecondary : Colours.palette.m3onSecondaryContainer
-                    fontStyle: Tokens.font.icon.large
+                    font.pointSize: Tokens.font.size.large
                 }
             }
 
@@ -61,23 +59,21 @@ StyledRect {
                 StyledText {
                     Layout.fillWidth: true
                     text: qsTr("Screen Recorder")
-                    font: Tokens.font.body.medium
+                    font.pointSize: Tokens.font.size.normal
                     elide: Text.ElideRight
                 }
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Recorder.paused ? qsTr("Paused") : Recorder.running ? qsTr("Running...") : qsTr("Ready")
+                    text: Recorder.paused ? qsTr("Recording paused") : Recorder.running ? qsTr("Recording running") : qsTr("Recording off")
                     color: Colours.palette.m3onSurfaceVariant
-                    font: Tokens.font.body.small
+                    font.pointSize: Tokens.font.size.small
                     elide: Text.ElideRight
-                    animate: true
                 }
             }
 
             SplitButton {
                 disabled: Recorder.running
-
                 active: menuItems.find(m => root.props.recordingMode === m.icon + m.text) ?? menuItems[0]
                 menu.onItemSelected: item => root.props.recordingMode = item.icon + item.text
 
@@ -119,7 +115,6 @@ StyledRect {
             Layout.fillWidth: true
             Layout.preferredHeight: implicitHeight
             sourceComponent: running ? recordingControls : recordingList
-            clip: Layout.preferredHeight < implicitHeight
 
             Behavior on Layout.preferredHeight {
                 id: locHeightAnim
@@ -131,11 +126,21 @@ StyledRect {
 
             Behavior on running {
                 SequentialAnimation {
-                    Anim {
-                        target: listOrControls
-                        property: "opacity"
-                        to: 0
-                        type: Anim.DefaultEffects
+                    ParallelAnimation {
+                        Anim {
+                            target: listOrControls
+                            property: "scale"
+                            to: 0.7
+                            duration: Tokens.anim.durations.small
+                            easing: Tokens.anim.standardAccel
+                        }
+                        Anim {
+                            target: listOrControls
+                            property: "opacity"
+                            to: 0
+                            duration: Tokens.anim.durations.small
+                            easing: Tokens.anim.standardAccel
+                        }
                     }
                     PropertyAction {
                         target: locHeightAnim
@@ -143,22 +148,25 @@ StyledRect {
                         value: true
                     }
                     PropertyAction {}
+                    PropertyAction {
+                        target: locHeightAnim
+                        property: "enabled"
+                        value: false
+                    }
                     ParallelAnimation {
-                        SequentialAnimation {
-                            PauseAnimation {
-                                duration: 100
-                            }
-                            PropertyAction {
-                                target: locHeightAnim
-                                property: "enabled"
-                                value: false
-                            }
+                        Anim {
+                            target: listOrControls
+                            property: "scale"
+                            to: 1
+                            duration: Tokens.anim.durations.small
+                            easing: Tokens.anim.standardDecel
                         }
                         Anim {
                             target: listOrControls
                             property: "opacity"
                             to: 1
-                            type: Anim.SlowEffects
+                            duration: Tokens.anim.durations.small
+                            easing: Tokens.anim.standardDecel
                         }
                     }
                 }
@@ -179,14 +187,14 @@ StyledRect {
         id: recordingControls
 
         RowLayout {
-            spacing: Tokens.spacing.medium
+            spacing: Tokens.spacing.normal
 
             StyledRect {
                 radius: Tokens.rounding.full
                 color: Recorder.paused ? Colours.palette.m3tertiary : Colours.palette.m3error
 
-                implicitWidth: recText.implicitWidth + Tokens.padding.medium * 2
-                implicitHeight: recText.implicitHeight + Tokens.padding.large
+                implicitWidth: recText.implicitWidth + Tokens.padding.normal * 2
+                implicitHeight: recText.implicitHeight + Tokens.padding.smaller * 2
 
                 StyledText {
                     id: recText
@@ -195,7 +203,7 @@ StyledRect {
                     animate: true
                     text: Recorder.paused ? "PAUSED" : "REC"
                     color: Recorder.paused ? Colours.palette.m3onTertiary : Colours.palette.m3onError
-                    font: Tokens.font.mono.small
+                    font.family: Tokens.font.family.mono
                 }
 
                 Behavior on implicitWidth {
@@ -223,7 +231,6 @@ StyledRect {
             }
 
             StyledText {
-                Layout.fillWidth: true
                 text: {
                     const elapsed = Recorder.elapsed;
 
@@ -239,53 +246,32 @@ StyledRect {
 
                     return qsTr("Recording for %1").arg(time);
                 }
-                font: Tokens.font.body.medium
-                elide: Text.ElideMiddle
+                font.pointSize: Tokens.font.size.normal
             }
 
-            ButtonRow {
-                spacing: Tokens.spacing.extraSmall
+            Item {
+                Layout.fillWidth: true
+            }
 
-                IconButton {
-                    shapeMorph: true
-                    isRound: true
-                    label.animate: true
-                    icon: Recorder.paused ? "play_arrow" : "pause"
-                    isToggle: true
-                    checked: Recorder.paused
-                    type: IconButton.Tonal
-                    font: Tokens.font.icon.medium
-                    onClicked: {
-                        Recorder.togglePause();
-                        internalChecked = Recorder.paused;
-                    }
-
-                    implicitWidth: {
-                        // Ensure even size so icon is centered properly
-                        const h = label.implicitHeight + Tokens.padding.large * 2;
-                        if (h % 2 !== 0)
-                            return h + 1;
-                        return h;
-                    }
+            IconButton {
+                label.animate: true
+                icon: Recorder.paused ? "play_arrow" : "pause"
+                toggle: true
+                checked: Recorder.paused
+                type: IconButton.Tonal
+                font.pointSize: Tokens.font.size.large
+                onClicked: {
+                    Recorder.togglePause();
+                    internalChecked = Recorder.paused;
                 }
+            }
 
-                IconButton {
-                    shapeMorph: true
-                    isRound: true
-                    icon: "stop"
-                    inactiveColour: Colours.palette.m3error
-                    inactiveOnColour: Colours.palette.m3onError
-                    font: Tokens.font.icon.medium
-                    onClicked: Recorder.stop()
-
-                    implicitWidth: {
-                        // Ensure even size so icon is centered properly
-                        const h = label.implicitHeight + Tokens.padding.large * 2;
-                        if (h % 2 !== 0)
-                            return h + 1;
-                        return h;
-                    }
-                }
+            IconButton {
+                icon: "stop"
+                inactiveColour: Colours.palette.m3error
+                inactiveOnColour: Colours.palette.m3onError
+                font.pointSize: Tokens.font.size.large
+                onClicked: Recorder.stop()
             }
         }
     }

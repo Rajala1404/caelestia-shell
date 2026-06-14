@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import Caelestia
 import Caelestia.Config
 import qs.components
 import qs.components.controls
@@ -16,10 +15,10 @@ Item {
     required property real maxHeight
 
     readonly property int padding: Tokens.padding.large
-    readonly property int rounding: Tokens.rounding.extraLarge
+    readonly property int rounding: Tokens.rounding.large
 
     implicitWidth: listWrapper.width + padding * 2
-    implicitHeight: searchWrapper.height + listWrapper.height + padding + searchWrapper.anchors.bottomMargin
+    implicitHeight: searchWrapper.height + listWrapper.height + padding * 2
 
     Item {
         id: listWrapper
@@ -54,7 +53,6 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: root.padding
-        anchors.bottomMargin: CUtils.clamp(root.padding - Config.border.thickness, 0, root.padding)
 
         implicitHeight: Math.max(searchIcon.implicitHeight, search.implicitHeight, clearIcon.implicitHeight)
 
@@ -77,8 +75,8 @@ Item {
             anchors.leftMargin: Tokens.spacing.small
             anchors.rightMargin: Tokens.spacing.small
 
-            topPadding: Tokens.padding.medium
-            bottomPadding: Tokens.padding.medium
+            topPadding: Tokens.padding.larger
+            bottomPadding: Tokens.padding.larger
 
             placeholderText: qsTr("Type \"%1\" for commands").arg(GlobalConfig.launcher.actionPrefix)
 

@@ -32,7 +32,7 @@ StyledListView {
 
     highlightFollowsCurrentItem: false
     highlight: StyledRect {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         color: Colours.palette.m3onSurface
         opacity: 0.08
 
@@ -41,7 +41,9 @@ StyledListView {
         implicitHeight: root.currentItem?.implicitHeight ?? 0
 
         Behavior on y {
-            Anim {}
+            Anim {
+                type: Anim.DefaultSpatial
+            }
         }
     }
 
@@ -165,8 +167,7 @@ StyledListView {
         enabled: !root.state
 
         Anim {
-            type: Anim.DefaultEffects
-            property: "opacity"
+            properties: "opacity,scale"
             from: 0
             to: 1
         }
@@ -176,8 +177,7 @@ StyledListView {
         enabled: !root.state
 
         Anim {
-            type: Anim.DefaultEffects
-            property: "opacity"
+            properties: "opacity,scale"
             from: 1
             to: 0
         }
@@ -188,8 +188,7 @@ StyledListView {
             property: "y"
         }
         Anim {
-            type: Anim.DefaultEffects
-            property: "opacity"
+            properties: "opacity,scale"
             to: 1
         }
     }
@@ -200,8 +199,7 @@ StyledListView {
             type: Anim.StandardSmall
         }
         Anim {
-            type: Anim.DefaultEffects
-            property: "opacity"
+            properties: "opacity,scale"
             to: 1
         }
     }
@@ -211,8 +209,7 @@ StyledListView {
             property: "y"
         }
         Anim {
-            type: Anim.DefaultEffects
-            property: "opacity"
+            properties: "opacity,scale"
             to: 1
         }
     }

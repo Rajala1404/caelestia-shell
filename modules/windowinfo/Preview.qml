@@ -15,7 +15,7 @@ Item {
     required property ShellScreen screen
     required property HyprlandToplevel client
 
-    Layout.preferredWidth: preview.implicitWidth + Tokens.padding.extraLargeIncreased
+    Layout.preferredWidth: preview.implicitWidth + Tokens.padding.large * 2
     Layout.fillHeight: true
 
     StyledClippingRect {
@@ -25,12 +25,12 @@ Item {
         anchors.top: parent.top
         anchors.bottom: label.top
         anchors.topMargin: Tokens.padding.large
-        anchors.bottomMargin: Tokens.spacing.medium
+        anchors.bottomMargin: Tokens.spacing.normal
 
         implicitWidth: view.implicitWidth
 
         color: Colours.tPalette.m3surfaceContainer
-        radius: Tokens.rounding.medium
+        radius: Tokens.rounding.small
 
         Loader {
             asynchronous: true
@@ -44,21 +44,22 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     text: "web_asset_off"
                     color: Colours.palette.m3outline
-                    fontStyle: Tokens.font.icon.builders.extraLarge.scale(3).build()
+                    font.pointSize: Tokens.font.size.extraLarge * 3
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("No active client")
                     color: Colours.palette.m3outline
-                    font: Tokens.font.body.builders.large.size(28).weight(Font.Medium).build()
+                    font.pointSize: Tokens.font.size.extraLarge
+                    font.weight: 500
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("Try switching to a window")
                     color: Colours.palette.m3outline
-                    font: Tokens.font.body.large
+                    font.pointSize: Tokens.font.size.large
                 }
             }
         }

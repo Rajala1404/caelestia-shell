@@ -11,7 +11,8 @@ TextField {
 
     color: Colours.palette.m3onSurface
     placeholderTextColor: Colours.palette.m3outline
-    font: Tokens.font.body.small
+    font.family: Tokens.font.family.sans
+    font.pointSize: Tokens.font.size.smaller
     renderType: echoMode === TextField.Password ? TextField.QtRendering : TextField.NativeRendering
     cursorVisible: !readOnly
 
@@ -24,7 +25,7 @@ TextField {
 
         implicitWidth: 2
         color: Colours.palette.m3primary
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
 
         Connections {
             function onCursorPositionChanged(): void {

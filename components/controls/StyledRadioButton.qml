@@ -7,7 +7,7 @@ import qs.services
 RadioButton {
     id: root
 
-    font: Tokens.font.body.small
+    font.pointSize: Tokens.font.size.smaller
 
     implicitWidth: implicitIndicatorWidth + implicitContentWidth + contentItem.anchors.leftMargin
     implicitHeight: Math.max(implicitIndicatorHeight, implicitContentHeight)
@@ -24,7 +24,7 @@ RadioButton {
         anchors.verticalCenter: parent.verticalCenter
 
         StateLayer {
-            anchors.margins: -Tokens.padding.small
+            anchors.margins: -Tokens.padding.smaller
             color: root.checked ? Colours.palette.m3onSurface : Colours.palette.m3primary
             z: -1
             onClicked: root.click()
@@ -46,9 +46,9 @@ RadioButton {
 
     contentItem: StyledText {
         text: root.text
-        font: root.font
+        font.pointSize: root.font.pointSize
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: outerCircle.right
-        anchors.leftMargin: Tokens.spacing.medium
+        anchors.leftMargin: Tokens.spacing.smaller
     }
 }

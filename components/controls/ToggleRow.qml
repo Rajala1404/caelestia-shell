@@ -12,7 +12,7 @@ RowLayout {
     property alias toggle: toggle
 
     Layout.fillWidth: true
-    spacing: Tokens.spacing.medium
+    spacing: Tokens.spacing.normal
 
     StyledText {
         Layout.fillWidth: true

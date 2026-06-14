@@ -16,41 +16,41 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.normal
         onClicked: root.modelData?.onClicked(root.list)
     }
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: Tokens.padding.medium
-        anchors.rightMargin: Tokens.padding.medium
-        anchors.margins: Tokens.padding.small
+        anchors.leftMargin: Tokens.padding.larger
+        anchors.rightMargin: Tokens.padding.larger
+        anchors.margins: Tokens.padding.smaller
 
         MaterialIcon {
             id: icon
 
             text: root.modelData?.icon ?? ""
-            fontStyle: Tokens.font.icon.extraLarge
+            font.pointSize: Tokens.font.size.extraLarge
 
             anchors.verticalCenter: parent.verticalCenter
         }
 
         Column {
             anchors.left: icon.right
-            anchors.leftMargin: Tokens.spacing.large
+            anchors.leftMargin: Tokens.spacing.larger
             anchors.verticalCenter: icon.verticalCenter
 
-            width: parent.width - icon.width - anchors.leftMargin - (current.active ? current.width + Tokens.spacing.medium : 0)
+            width: parent.width - icon.width - anchors.leftMargin - (current.active ? current.width + Tokens.spacing.normal : 0)
             spacing: 0
 
             StyledText {
                 text: root.modelData?.name ?? ""
-                font: Tokens.font.body.medium
+                font.pointSize: Tokens.font.size.normal
             }
 
             StyledText {
                 text: root.modelData?.description ?? ""
-                font: Tokens.font.body.small
+                font.pointSize: Tokens.font.size.small
                 color: Colours.palette.m3outline
 
                 elide: Text.ElideRight
@@ -71,7 +71,7 @@ Item {
             sourceComponent: MaterialIcon {
                 text: "check"
                 color: Colours.palette.m3onSurfaceVariant
-                fontStyle: Tokens.font.icon.large
+                font.pointSize: Tokens.font.size.large
             }
         }
     }

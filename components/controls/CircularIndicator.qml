@@ -19,8 +19,8 @@ BusyIndicator {
         Completing
     }
 
-    property real implicitSize: Tokens.font.body.medium.pointSize * 3
-    property real strokeWidth: Tokens.padding.extraSmall
+    property real implicitSize: Tokens.font.size.normal * 3
+    property real strokeWidth: Tokens.padding.small * 0.8
     property color fgColour: Colours.palette.m3primary
     property color bgColour: Colours.palette.m3secondaryContainer
 
@@ -63,7 +63,6 @@ BusyIndicator {
 
     transitions: Transition {
         Anim {
-            type: Anim.DefaultEffects
             properties: "opacity,internalStrokeWidth"
             duration: manager.completeEndDuration * Tokens.anim.durations.scale
         }
@@ -78,7 +77,6 @@ BusyIndicator {
         rotation: manager.rotation
         startAngle: manager.startFraction * 360
         value: manager.endFraction - manager.startFraction
-        hasEndIndicator: false
     }
 
     CircularIndicatorManager {

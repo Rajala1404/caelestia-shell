@@ -4,7 +4,7 @@ import Quickshell.Io
 import Caelestia
 import qs.components.misc
 import qs.services
-import qs.modules.nexus
+import qs.modules.controlcenter
 
 Scope {
     id: root
@@ -15,8 +15,8 @@ Scope {
     // qmllint disable unresolved-type
     CustomShortcut {
         // qmllint enable unresolved-type
-        name: "nexus"
-        description: "Open nexus"
+        name: "controlCenter"
+        description: "Open control center"
         onPressed: WindowFactory.create()
     }
 
@@ -133,7 +133,7 @@ Scope {
             WindowFactory.create();
         }
 
-        target: "nexus"
+        target: "controlCenter"
     }
 
     IpcHandler {
